@@ -382,9 +382,31 @@ def redirect_page(target: str) -> str:
 
 DOC_PAGES = [
     # (output file, source markdown, nav label)
-    ("readme.html", "README.md", "Challenge README"),
+    ("index.html", "README.md", "Challenge README"),
     ("guidelines.html", "TRIAGE_GUIDELINES.md", "Triage Guidelines"),
 ]
+
+
+def drop_local_setup(readme: str) -> str:
+  """Replaces the Docker setup steps with the hosted portal links they lead to."""
+  section = re.search(
+      r"(## Section 1: Getting Started\n)(.*?)(?=\n## Section 2)", readme, re.S
+  )
+  portals = section and re.search(
+      r"^3\. \*\*Access the application portals and hotlists:\*\*\n((?:   .*\n)+)",
+      section.group(2),
+      re.M,
+  )
+  if not portals:
+    raise RuntimeError("README Section 1 layout changed; update drop_local_setup()")
+
+  portal_list = re.sub(r"^   ", "", portals.group(1), flags=re.M)
+  body = (
+      "\nThe application portals are hosted alongside this page, so there is"
+      " nothing to install. Open them from the links below or from the top"
+      " navigation.\n\n" + portal_list
+  )
+  return readme[: section.start(2)] + body + readme[section.end(2) :]
 
 
 def localize_markdown(text: str) -> str:
@@ -436,7 +458,7 @@ SITE_HEAD = """<!DOCTYPE html>
     <header class="site-bar">
         <a href="./" class="site-brand"><i class="material-icons">shield</i> Incident Triage Challenge</a>
         <nav class="site-nav">
-            <a href="readme.html" class="{readme_active}">README</a>
+            <a href="./" class="{readme_active}">README</a>
             <a href="guidelines.html" class="{guidelines_active}">Triage Guidelines</a>
             <a href="tracker/hotlists/5829104/">Issue Tracker</a>
             <a href="directory/">Team Directory</a>
@@ -448,27 +470,21 @@ SITE_HEAD = """<!DOCTYPE html>
 def site_head(title: str, active: str = "") -> str:
   return SITE_HEAD.format(
       title=html.escape(title),
-      readme_active="active" if active == "readme.html" else "",
+      readme_active="active" if active == "index.html" else "",
       guidelines_active="active" if active == "guidelines.html" else "",
   )
 
 
 def build_doc_page(out_name: str, src: str, label: str):
   with open(os.path.join(PROJECT_ROOT, src), "r", encoding="utf-8") as f:
-    markdown = localize_markdown(f.read())
-
-  note = ""
+    markdown = f.read()
   if src == "README.md":
-    note = """
-        <div class="static-note">
-            <i class="material-icons">info</i>
-            <div>This is the static GitHub Pages edition: the links below open browser-only copies of the
-            Issue Tracker and Team Directory. Comments and assignments are saved in your browser only.
-            To run the original servers, follow <em>Getting Started</em>.</div>
-        </div>"""
+    markdown = drop_local_setup(markdown)
+  markdown = localize_markdown(markdown)
 
-  page = site_head(f"{label} · Incident Triage Challenge", out_name) + f"""
-    <main class="doc">{note}
+  title = "Incident Triage Challenge" if out_name == "index.html" else f"{label} · Incident Triage Challenge"
+  page = site_head(title, out_name) + f"""
+    <main class="doc">
         <article id="content" class="markdown"></article>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
@@ -480,40 +496,6 @@ def build_doc_page(out_name: str, src: str, label: str):
 </html>
 """
   write(out_name, page)
-
-
-def build_index():
-  cards = [
-      ("readme.html", "description", "Challenge README",
-       "Setup, hotlist overview, objectives and tasks."),
-      ("guidelines.html", "rule", "Triage Guidelines",
-       "Routing, follow-up and escalation rules for security findings."),
-      (f"tracker/hotlists/{QUEUE_ID}/", "bug_report", "Issue Tracker",
-       "Active triage queue (hotlist:5829104) and the enterprise backlog (hotlist:7920155)."),
-      ("directory/", "corporate_fare", "Team & Ownership Directory",
-       "Teams, owned endpoints, Tech Leads and on-call rosters."),
-  ]
-  cards_html = "\n".join(
-      f"""            <a class="tile" href="{href}">
-                <i class="material-icons">{icon}</i>
-                <strong>{html.escape(title)}</strong>
-                <span>{html.escape(desc)}</span>
-            </a>"""
-      for href, icon, title, desc in cards
-  )
-  page = site_head("Incident Triage Challenge") + f"""
-    <main class="landing">
-        <h1>Incident Triage &amp; Bug Management Challenge</h1>
-        <p class="lede">Start with the README, keep the triage guidelines open, then work the tickets in the Issue Tracker.</p>
-        <div class="tiles">
-{cards_html}
-        </div>
-        <p class="fine-print">Static edition built {BUILD_TIME.strftime("%B %d, %Y")}. Bug dates stay relative to today.</p>
-    </main>
-</body>
-</html>
-"""
-  write("index.html", page)
 
 
 SITE_CSS = """:root {
@@ -562,36 +544,7 @@ a { color: var(--accent); }
 .site-nav a:hover { background: var(--code-bg); }
 .site-nav a.active { background: #e8f0fe; color: var(--accent); }
 
-.landing, .doc { max-width: 920px; margin: 0 auto; padding: 40px 16px 80px; }
-.landing h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; }
-.lede { color: var(--muted); margin: 0 0 28px; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.tile {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 20px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    color: var(--text);
-    text-decoration: none;
-}
-.tile:hover { border-color: var(--accent); box-shadow: 0 1px 6px rgba(26, 115, 232, .15); }
-.tile .material-icons { color: var(--accent); font-size: 28px; }
-.tile span { color: var(--muted); font-size: 14px; }
-.fine-print { margin-top: 32px; color: var(--muted); font-size: 13px; }
-
-.static-note {
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    background: #e8f0fe;
-    border-radius: 8px;
-    font-size: 14px;
-}
-.static-note .material-icons { color: var(--accent); }
+.doc { max-width: 920px; margin: 0 auto; padding: 40px 16px 80px; }
 .markdown {
     background: var(--card);
     border: 1px solid var(--line);
@@ -632,7 +585,6 @@ def main():
   build_directory()
   for out_name, src, label in DOC_PAGES:
     build_doc_page(out_name, src, label)
-  build_index()
   write("assets/site.css", SITE_CSS)
   # Serve files as-is; nothing here needs Jekyll.
   write(".nojekyll", "")

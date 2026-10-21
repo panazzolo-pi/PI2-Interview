@@ -44,36 +44,7 @@ a { color: var(--accent); }
 .site-nav a:hover { background: var(--code-bg); }
 .site-nav a.active { background: #e8f0fe; color: var(--accent); }
 
-.landing, .doc { max-width: 920px; margin: 0 auto; padding: 40px 16px 80px; }
-.landing h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; }
-.lede { color: var(--muted); margin: 0 0 28px; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.tile {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 20px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    color: var(--text);
-    text-decoration: none;
-}
-.tile:hover { border-color: var(--accent); box-shadow: 0 1px 6px rgba(26, 115, 232, .15); }
-.tile .material-icons { color: var(--accent); font-size: 28px; }
-.tile span { color: var(--muted); font-size: 14px; }
-.fine-print { margin-top: 32px; color: var(--muted); font-size: 13px; }
-
-.static-note {
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    background: #e8f0fe;
-    border-radius: 8px;
-    font-size: 14px;
-}
-.static-note .material-icons { color: var(--accent); }
+.doc { max-width: 920px; margin: 0 auto; padding: 40px 16px 80px; }
 .markdown {
     background: var(--card);
     border: 1px solid var(--line);
