@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>b/683920194 · Issue Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../tracker/static/buganizer.css">
+</head>
+<body>
+    <!-- Top App Bar -->
+    <header class="app-bar">
+        <a href="../../../tracker/hotlists/5829104/" class="brand">
+            <span class="brand-mark"><i class="material-icons">bug_report</i></span>
+            <span class="brand-name">Issue Tracker</span>
+        </a>
+
+        <nav class="app-nav" aria-label="Hotlists">
+            <a href="../../../tracker/hotlists/5829104/" class="app-nav-link " title="Active Incident Triage Queue (hotlist:5829104)">
+                <i class="material-icons">priority_high</i>
+                <span class="nav-label">Triage Queue</span>
+                <span class="nav-count">2</span>
+            </a>
+            <a href="../../../tracker/hotlists/7920155/" class="app-nav-link active" title="Enterprise Vulnerability Inventory &amp; Backlog (hotlist:7920155)">
+                <i class="material-icons">inventory_2</i>
+                <span class="nav-label">Inventory &amp; Backlog</span>
+                <span class="nav-count">24</span>
+            </a>
+        </nav>
+
+        <form class="app-search" method="GET" action="../../../tracker/hotlists/7920155/">
+            <i class="material-icons">search</i>
+            <input type="text" name="q" placeholder="Search syntax: status:assigned assignee:maya_l priority:p1..." value="id:683920194" autocomplete="off" spellcheck="false">
+        </form>
+
+        <div class="app-bar-right">
+            <a href="../../../directory/" target="_blank" class="tool-link" title="Open Team Directory to find service owners">
+                <i class="material-icons">corporate_fare</i>
+                <span>Team &amp; Ownership Directory</span>
+                <i class="material-icons ext-icon">open_in_new</i>
+            </a>
+            <div class="user-avatar" title="Logged in as security-triage@company.com">SE</div>
+        </div>
+    </header>
+
+    <div class="page">
+        <!-- Breadcrumbs & quick switch between active findings -->
+        <div class="subbar">
+            <div class="breadcrumbs">
+                <a href="../../../tracker/hotlists/7920155/">Enterprise Bug &amp; Vulnerability Inventory</a>
+                <i class="material-icons">chevron_right</i>
+                <span class="current">b/683920194</span>
+            </div>
+            <div class="quick-switch">
+                <span class="quick-switch-label">Active findings</span>
+                <a href="../../../tracker/issues/543338174/" class="issue-tab " title="Payments Webhook Auth">
+                    <span class="issue-badge">b/543338174</span>
+                    <span class="tab-title">Payments Webhook Auth</span>
+                </a>
+                <a href="../../../tracker/issues/618294710/" class="issue-tab " title="Customer PII Leakage">
+                    <span class="issue-badge">b/618294710</span>
+                    <span class="tab-title">Customer PII Leakage</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="issue-layout">
+            <!-- Left Content Area -->
+            <main class="main-content">
+                <div class="card issue-header">
+                    <div class="bug-id-row">
+                        <span class="bug-id-label">b/683920194</span>
+                        <span class="bug-type-badge"><i class="material-icons">security</i> VULNERABILITY</span>
+                        <span class="status-chip status-blocked">Blocked</span>
+                        <span class="hotlist-chip"><i class="material-icons">label</i> P1-Security-Incident</span>
+                        <span class="hotlist-chip"><i class="material-icons">label</i> Internal-Audit-2026</span>
+                    </div>
+                    <h1 class="bug-title">[Security P1] Docker Socket Exposure in CI Worker Container Host</h1>
+                    <div class="issue-header-foot">
+                        <span class="component-path"><i class="material-icons">category</i> Component: <strong>Infrastructure &gt; Cloud SRE &amp; Containers &gt; Docker Host</strong></span>
+                        <div class="action-group">
+                            <button class="btn primary" onclick="focusComposer()"><i class="material-icons">comment</i> Comment / Reply</button>
+                            <button class="btn" onclick="document.getElementById('assigneeInput').focus()"><i class="material-icons">person_add</i> Assign</button>
+                            <button class="btn" onclick="copyBugLink()"><i class="material-icons">link</i> Copy Link</button>
+                            <button class="btn ghost" onclick="window.location.reload()" title="Refresh"><i class="material-icons">refresh</i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description Card -->
+                <div class="card bug-card description-card">
+                    <div class="card-header">
+                        <div class="reporter-info">
+                            <div class="avatar">JD</div>
+                            <div class="reporter-details">
+                                <span class="reporter-name"><strong>infra-audit@company.com (Infrastructure Security Audit)</strong></span>
+                                <span class="report-date">reported on October 18, 2026 10:00 UTC</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <i class="material-icons" title="Reply" onclick="focusComposer()">reply</i>
+                            <i class="material-icons" title="More options">more_vert</i>
+                        </div>
+                    </div>
+                    <div class="card-body description-content">
+                        <h3>Executive Summary</h3>
+                        <p>During an infrastructure container security review, Security Audit discovered that shared ephemeral CI/CD worker pods running on the Kubernetes build cluster mount the host's Docker socket at <code>/var/run/docker.sock</code> in order to allow test suites to build and push container images. Any developer pipeline script or malicious dependency executing inside a CI job can communicate with the host Docker daemon with root privileges, escape the container boundary, and compromise the underlying Kubernetes worker node.</p>
+
+                        <h3>Affected Asset &amp; Endpoint</h3>
+                        <ul>
+                            <li><strong>API Endpoint:</strong> <code>CI Worker Daemon (Build Runner Pool)</code></li>
+                            <li><strong>Code Location:</strong> <code>//depot/docker/ci_worker.yaml</code></li>
+                        </ul>
+
+                        <h3>Vulnerability Findings &amp; Impacted Scope</h3>
+                        <ul>
+                            <li><code>/var/run/docker.sock</code> bind-mounted with read-write permissions</li><li>Host filesystem root accessible via Docker API volume mounts</li><li>Node-level service account tokens and secrets accessible across shared worker VMs</li>
+                        </ul>
+
+                        <h3>Reproduction Request</h3>
+                        <pre><code># Inside any unprivileged CI job container:
+docker -H unix:///var/run/docker.sock run -v /:/host_root alpine cat /host_root/etc/shadow</code></pre>
+
+                        <h3>Sample Response / Verification Payload</h3>
+                        <pre><code>root:$6$rounds=656000$saltsalt...:19800:0:99999:7:::</code></pre>
+
+                        <h3>Business &amp; Security Impact</h3>
+                        <p>Critical infrastructure container escape. Enables arbitrary host root execution, cross-tenant build job tampering, lateral movement across the Kubernetes cluster, and extraction of node credentials.</p>
+
+                        <h3>Proposed Remediation SLO</h3>
+                        <p>P1/S1 Infrastructure Security Vulnerability: Resolution required within 48 hours of initial triage (Target Due Date: October 25, 2026 18:00 UTC).</p>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <h2 class="section-heading"><i class="material-icons">forum</i> Activity <span class="count">8</span></h2>
+                <div class="comments-section" id="commentsContainer">
+                    
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-5">I</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>infra-audit@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#1</span> &bull; commented on October 18, 2026 10:00 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Filing P1 finding for Docker socket mount in CI runner pods.<br><br>We observed <code>volumeMounts: - mountPath: /var/run/docker.sock name: docker-socket</code> in <code>//depot/docker/ci_worker.yaml</code> across all runner pools. Any pull request running automated unit tests has full root control over the host node via standard docker CLI commands.
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-5">K</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>kevin_j@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#2</span> &bull; commented on October 18, 2026 14:15 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Acknowledging finding. We originally mounted the socket because several teams build microservice images during their integration test pipelines. We will evaluate migrating off Docker-outside-of-Docker (DooD).
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-4">S</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>sarah_k@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#3</span> &bull; commented on October 19, 2026 09:30 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Can we just switch to Docker-in-Docker (dind) sidecars instead of re-architecting everything?<br><br>Over 40 services currently rely on <code>docker build</code> in CI. If we disable the socket without a drop-in replacement, build pipelines for payments and customer API will break.
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-1">A</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>alex_m@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#4</span> &bull; commented on October 19, 2026 11:20 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            DinD is not an acceptable solution—it requires <code>securityContext.privileged: true</code> which violates our cluster PodSecurityStandards (Restricted profile) and provides essentially identical host-level escape vectors.<br><br>The approved enterprise standard is rootless in-container builders (Google Kaniko or Buildah). Kaniko executes purely in user space without requiring root privileges or socket mounts.
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-4">S</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>sarah_k@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#5</span> &bull; commented on October 19, 2026 15:10 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Also noticing unrelated test failures in node-18 frontend builds on runner pool 3—getting timeout errors during npm install. Is that connected to the socket permissions change?
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-5">K</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>kevin_j@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#6</span> &bull; commented on October 20, 2026 10:45 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Hi Sarah, the npm timeout on runner pool 3 is an unrelated memory limit issue (tracked in b/992148102). Nothing has been disabled yet on the socket.<br><br>Regarding the remediation: I tested Kaniko on a staging runner pool and successfully built container images without any socket mount. PR #4920 is prepared.
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-5">I</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>infra-audit@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#7</span> &bull; commented on October 21, 2026 08:15 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Checking in on timeline. P1 SLA target is in 4 days. Can we deploy PR #4920 to production runners today?
+        </div>
+    </div>
+    
+
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-5">K</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>kevin_j@company.com</strong></span>
+                    <span class="report-date"><span class="comment-number">#8</span> &bull; commented on October 21, 2026 10:40 UTC</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            Setting bug status to **Blocked**.<br><br>The Kaniko image builder template is completed, but production rollout is currently blocked on external infrastructure provisioning:<br><br>1. **Cloud Storage & IAM Dependency:** Kaniko requires a dedicated Cloud Storage build-cache bucket (<code>gs://ci-kaniko-cache-prod</code>) and a Workload Identity IAM service account (<code>kaniko-builder@prod-ci.iam.gserviceaccount.com</code>) to publish container layers without storing static registry credentials.<br>2. **Pending Ticket:** We submitted ticket <code>b/782194012</code> to <strong>storage-infra@company.com</strong> and <strong>cloud-iam-oncall</strong> to provision the bucket and Workload Identity bindings, but the request is pending storage quota and IAM security review.<br><br>Until the IAM service account and storage bucket are provisioned by the Cloud Storage team, deploying Kaniko would break image caching and registry publishing across all CI pipelines. Following up directly with @storage-oncall to unblock.
+        </div>
+    </div>
+    
+                </div>
+
+                <!-- Comment Composer -->
+                <div class="card comment-composer" id="composer">
+                    <div class="composer-title">
+                        <i class="material-icons">rate_review</i>
+                        <span>Add Triage Response, Follow-Up Ping, or Engineering Handover Note</span>
+                    </div>
+                    <form id="commentForm">
+                        <textarea id="commentInput" class="comment-textarea" placeholder="Write your triage reply, follow-up ping to the assignee, or engineering handover note..." required></textarea>
+                        <div class="composer-controls">
+                            <div class="composer-meta">
+                                <label for="senderInput">Author</label>
+                                <input type="text" id="senderInput" class="text-input" value="security-triage@company.com">
+                            </div>
+                            <button type="submit" class="btn primary">
+                                <i class="material-icons">send</i> Post Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+
+            <!-- Right Sidebar (Issue Attributes) -->
+            <aside class="sidebar">
+                <div class="card sidebar-section">
+                    <div class="section-title">Issue Attributes</div>
+                    <dl class="attributes-list">
+                        <dt>Status</dt>
+                        <dd><span class="status-chip status-blocked" id="statusChip"><span id="statusText">Blocked</span></span></dd>
+
+                        <dt>Priority</dt>
+                        <dd><span class="level-badge priority-p1">P1</span></dd>
+
+                        <dt>Severity</dt>
+                        <dd><span class="level-badge severity-s1">S1</span></dd>
+
+                        <dt class="stack">Type</dt>
+                        <dd class="stack">Vulnerability (Container / Privilege Escalation)</dd>
+
+                        <dt class="stack">Due Date (SLO)</dt>
+                        <dd class="stack"><span class="due-date-badge "><i class="material-icons">event</i> October 25, 2026 (Target: 48h SLA)</span></dd>
+                    </dl>
+                </div>
+
+                <div class="card sidebar-section">
+                    <div class="section-title">Ownership &amp; People</div>
+                    <dl class="attributes-list">
+                        <dt><label for="assigneeInput">Assignee</label></dt>
+                        <dd>
+                            <form id="assignForm" class="assignee-widget">
+                                <input type="text" id="assigneeInput" class="text-input assignee-input" value="kevin_j" placeholder="ldap" spellcheck="false">
+                                <button type="submit" class="assign-btn">Assign</button>
+                            </form>
+                        </dd>
+
+                        <dt class="stack">Reporter</dt>
+                        <dd class="stack"><span class="user-link">infra-audit@company.com (Infrastructure Security Audit)</span></dd>
+
+                        <dt>Verifier</dt>
+                        <dd class="muted">security-triage@company.com</dd>
+
+                        <dt>CCs</dt>
+                        <dd class="muted">seceng-review@company.com</dd>
+                    </dl>
+                </div>
+
+                <!-- Ownership Helper Directory Callout -->
+                <div class="sidebar-help-card">
+                    <h4><i class="material-icons">corporate_fare</i> Service Ownership Registry</h4>
+                    <p>Need to check who owns an API endpoint, code path, or on-call rotation? Use the internal Team Directory service to look up LDAP rosters.</p>
+                    <a href="../../../directory/" target="_blank">Open Team &amp; Ownership Directory (8082) <i class="material-icons">arrow_forward</i></a>
+                </div>
+
+                <div class="card sidebar-section">
+                    <div class="section-title">Timeline</div>
+                    <dl class="attributes-list">
+                        <dt>Created</dt>
+                        <dd>October 18, 2026 10:00 UTC</dd>
+
+                        <dt>Modified</dt>
+                        <dd id="lastModifiedDate">October 21, 2026 10:40 UTC</dd>
+                    </dl>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-msg"></div>
+
+    <script>
+        const currentBugId = "683920194";
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        }
+
+        function focusComposer() {
+            document.getElementById('composer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('commentInput').focus({ preventScroll: true });
+        }
+
+        function copyBugLink() {
+            navigator.clipboard.writeText(window.location.href);
+            showToast(`Copied bug link (b/${currentBugId}) to clipboard!`);
+        }
+
+        // Comment Submission
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const text = document.getElementById('commentInput').value.trim();
+            const sender = document.getElementById('senderInput').value.trim();
+
+            if (!text) return;
+
+            try {
+                const res = await fetch(`/api/issues/${currentBugId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        author: sender,
+                        text: text,
+                        is_internal: true
+                    })
+                });
+
+                if (res.ok) {
+                    showToast('Comment posted successfully!');
+                    document.getElementById('commentInput').value = '';
+                    setTimeout(() => { window.location.reload(); }, 600);
+                } else {
+                    showToast('Error posting comment.');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Network error posting comment.');
+            }
+        });
+
+        // Assignee Update
+        document.getElementById('assignForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const newLdap = document.getElementById('assigneeInput').value.trim();
+            if (!newLdap) return;
+
+            try {
+                const res = await fetch(`/api/issues/${currentBugId}/assign`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ assignee_ldap: newLdap })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    showToast(`Bug assigned to @${data.assignee_ldap}`);
+                    document.getElementById('statusText').textContent = 'Assigned';
+                    document.getElementById('statusChip').className = 'status-chip status-assigned';
+                } else {
+                    showToast('Error assigning bug: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Network error assigning bug.');
+            }
+        });
+    </script>
+
+    <script>
+    // Static-site stand-in for the Issue Tracker server (see scripts/build_pages.py).
+    (function () {
+        const BUILD_TIME = 1792587548359;
+        const PAGE = {"kind": "issue", "id": "683920194", "baseComments": 8};
+        const KEY = 'pi2-static-tracker';
+        const DAY = 86400000;
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                        'August', 'September', 'October', 'November', 'December'];
+        const DATE_RE = new RegExp('\\b(' + MONTHS.join('|') + ') (\\d{2}), (\\d{4})\\b', 'g');
+        const dayShift = Math.floor(Date.now() / DAY) - Math.floor(BUILD_TIME / DAY);
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const fmtDate = (d) => `${MONTHS[d.getUTCMonth()]} ${pad(d.getUTCDate())}, ${d.getUTCFullYear()}`;
+        const nowStr = () => {
+            const d = new Date();
+            return `${fmtDate(d)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+        };
+        const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }[ch]));
+
+        function load() {
+            try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+        }
+        function save(state) {
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        }
+
+        // Keep build-time dates relative to today, as the live server does at startup.
+        function shiftDates() {
+            if (dayShift <= 0) return;
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+            nodes.forEach((n) => {
+                const shifted = n.nodeValue.replace(DATE_RE, (m, mon, day, year) =>
+                    fmtDate(new Date(Date.UTC(+year, MONTHS.indexOf(mon), +day + dayShift))));
+                if (shifted !== n.nodeValue) n.nodeValue = shifted;
+            });
+        }
+
+        // Mirrors render_comments_html() in apps/buganizer/controller.py.
+        function commentCard(c) {
+            const rawAuthor = c.author.split('@')[0].split('(')[0].trim();
+            let initials = rawAuthor.split(/\s+/).filter(Boolean).slice(0, 2)
+                .map((part) => part[0].toUpperCase()).join('');
+            if (!initials) initials = rawAuthor.slice(0, 2).toUpperCase();
+            let sum = 0;
+            for (const ch of rawAuthor) sum += ch.codePointAt(0);
+            const tone = sum % 6 + 1;
+            return `
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-${tone}">${esc(initials)}</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>${esc(c.author)}</strong></span>
+                    <span class="report-date"><span class="comment-number">${esc(c.number)}</span> &bull; commented on ${esc(c.date)}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            ${esc(c.text).replace(/\n/g, '<br>')}
+        </div>
+    </div>`;
+        }
+
+        function applyToIssuePage(st) {
+            const comments = st.comments || [];
+            const container = document.getElementById('commentsContainer');
+            comments.forEach((c) => container.insertAdjacentHTML('beforeend', commentCard(c)));
+            const count = document.querySelector('.section-heading .count');
+            if (count) count.textContent = PAGE.baseComments + comments.length;
+            if (st.assignee !== undefined) {
+                document.getElementById('assigneeInput').value = st.assignee;
+                document.querySelectorAll('.status-chip').forEach((chip) => {
+                    chip.className = chip.className.replace(/status-\S+/, 'status-assigned');
+                });
+                document.getElementById('statusText').textContent = 'Assigned';
+                const headerChip = document.querySelector('.bug-id-row .status-chip');
+                if (headerChip) headerChip.textContent = 'Assigned';
+            }
+            if (st.modified) document.getElementById('lastModifiedDate').textContent = st.modified;
+        }
+
+        function applyToHotlistRow(row, st) {
+            const cells = row.children;
+            if (st.assignee !== undefined) {
+                row.dataset.assignee = (st.assignee || 'unassigned').toLowerCase();
+                row.dataset.status = 'assigned';
+                cells[4].innerHTML = '<span class="status-chip status-assigned">Assigned</span>';
+                cells[6].innerHTML = st.assignee
+                    ? `<span class='assignee-chip'><span class='mini-avatar'>${esc(st.assignee.slice(0, 2))}</span>@${esc(st.assignee)}</span>`
+                    : "<span class='assignee-chip unassigned'>Unassigned</span>";
+            }
+            const extra = (st.comments || []).map((c) => `${c.author} ${c.text} ${c.number}`).join(' ');
+            row.dataset.search = `${row.dataset.search} ${st.assignee || ''} ${extra}`.toLowerCase();
+            if (st.modified) cells[7].textContent = st.modified;
+        }
+
+        // Answer the issue page's POST calls from localStorage instead of the server.
+        const realFetch = window.fetch.bind(window);
+        window.fetch = function (url, opts) {
+            const m = String(url).match(/^\/api\/issues\/(\d+)\/(comments|assign)$/);
+            if (!m) return realFetch(url, opts);
+            const body = JSON.parse((opts && opts.body) || '{}');
+            const state = load();
+            const st = state[m[1]] = state[m[1]] || { comments: [] };
+            const now = nowStr();
+            let result;
+            if (m[2] === 'comments') {
+                const number = PAGE.baseComments + st.comments.length + 1;
+                const comment = {
+                    number: `#${number}`,
+                    author: body.author || 'security-triage@company.com',
+                    date: now,
+                    text: (body.text || '').trim(),
+                };
+                st.comments.push(comment);
+                result = { success: true, comment: comment, total_comments: number };
+            } else {
+                const assignee = (body.assignee_ldap || '').trim().replace(/^@+/, '');
+                st.assignee = assignee;
+                result = { success: true, bug_id: m[1], assignee_ldap: assignee, status: 'Assigned' };
+            }
+            st.modified = now;
+            save(state);
+            return Promise.resolve(new Response(JSON.stringify(result), {
+                status: 200, headers: { 'Content-Type': 'application/json' },
+            }));
+        };
+
+        shiftDates();
+        const state = load();
+        if (PAGE.kind === 'issue' && state[PAGE.id]) {
+            applyToIssuePage(state[PAGE.id]);
+        } else if (PAGE.kind === 'hotlist') {
+            document.querySelectorAll('#issuesTableBody tr[data-id]').forEach((row) => {
+                if (state[row.dataset.id]) applyToHotlistRow(row, state[row.dataset.id]);
+            });
+            // The page already filtered on load; redo it now that rows reflect local changes.
+            const input = document.getElementById('hotlistFilterInput');
+            if (input && input.value && typeof filterTable === 'function') filterTable(input.value);
+        }
+    })();
+    </script>
+
+    <div class="static-demo-badge" style="position:fixed;left:12px;bottom:12px;z-index:50;display:flex;gap:10px;align-items:center;padding:6px 12px;border-radius:999px;background:#202124;color:#fff;font:500 12px/1.4 Inter,system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+        <span>Static demo &middot; changes are saved in this browser only</span>
+        <a href="#" onclick="try{localStorage.removeItem('pi2-static-tracker')}catch(e){};location.reload();return false;" style="color:#8ab4f8;">Reset</a>
+        <a href="../../../" style="color:#8ab4f8;">Docs</a>
+    </div>
+</body>
+</html>

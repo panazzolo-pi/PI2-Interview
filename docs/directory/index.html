@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Team &amp; Ownership Directory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../directory/static/team_directory.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="directory-header">
+        <div class="header-brand">
+            <span class="brand-mark"><i class="material-icons">corporate_fare</i></span>
+            <span>Team &amp; Service Ownership Directory</span>
+        </div>
+        <nav class="header-nav">
+            <a href="../tracker/hotlists/5829104/" target="_blank" class="header-link" title="Open the Issue Tracker triage queue">
+                <i class="material-icons">bug_report</i>
+                <span>Issue Tracker Hotlists (8081)</span>
+                <i class="material-icons ext-icon">open_in_new</i>
+            </a>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Search & Lookup Tool -->
+    <section class="hero-section">
+        <h1 class="hero-title">Service &amp; Codebase Ownership Registry</h1>
+        <p class="hero-subtitle">
+            Query engineering teams, Tech Lead (TL) LDAPs, On-Call rosters, and code depot paths. Use this directory during security bug triage to assign incoming reports to the correct engineering owner.
+        </p>
+
+        <div class="search-controls">
+            <!-- Keyword Search -->
+            <div class="control-card">
+                <label class="control-label" for="teamSearchInput">
+                    <i class="material-icons">groups</i> Search teams
+                </label>
+                <div class="search-input-wrapper">
+                    <i class="material-icons search-icon">search</i>
+                    <input type="text" id="teamSearchInput" class="search-input" placeholder="Search by team name, LDAP, component, or keyword..." autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Component Resolver -->
+            <div class="control-card">
+                <label class="control-label" for="pathLookupInput">
+                    <i class="material-icons">explore</i> Resolve ownership
+                </label>
+                <div class="lookup-box">
+                    <input type="text" id="pathLookupInput" placeholder="Resolve path (e.g. /api/..., //depot/...)..." autocomplete="off" spellcheck="false">
+                    <button type="button" id="pathLookupBtn" class="lookup-btn">
+                        <i class="material-icons">search</i> Resolve
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="filter-bar">
+            <div class="filter-pills">
+                <button class="pill active" data-filter="all">All Teams</button>
+                <button class="pill" data-filter="Core User & Account Infrastructure">Customer &amp; Account Infrastructure</button>
+                <button class="pill" data-filter="Information Security & Privacy">Security &amp; Privacy</button>
+                <button class="pill" data-filter="Network & Edge Infrastructure">Network &amp; Gateway</button>
+                <button class="pill" data-filter="Financial Engineering & Commerce">Payments &amp; Commerce</button>
+                <button class="pill" data-filter="Site Reliability Engineering">SRE &amp; Infrastructure</button>
+            </div>
+            <span class="results-count">Showing <strong id="teamsVisibleCount">6</strong> of 6 teams</span>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <main class="directory-container">
+        <!-- Ownership Resolver Banner -->
+        <div id="lookupBanner" class="lookup-result-banner">
+            <div class="banner-content">
+                <i class="material-icons banner-icon" id="bannerIcon">verified_user</i>
+                <div class="banner-text">
+                    <h4 id="bannerTitle">Ownership Resolved</h4>
+                    <div id="bannerDetails"></div>
+                </div>
+            </div>
+            <button type="button" id="dismissBannerBtn" class="banner-close" title="Dismiss">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+
+        <!-- Teams Grid -->
+        <div class="teams-grid" id="teamsGrid">
+            
+    <article class="team-card" data-id="customer-account-platform" data-department="Core User &amp; Account Infrastructure" data-component="privacy">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>Customer Account &amp; Data Services Platform</h3>
+                <div class="department-label">Core User &amp; Account Infrastructure</div>
+            </div>
+            <span class="tag-badge">CUSTOMER-DATA</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Responsible for backend Customer Account API services, client profile data retrieval endpoints (/api/v2/clients/*), customer entity models, and CRM integration layers. Responsible for applying data sanitization before returning customer objects to clients.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">MV</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@marcos_v</span>
+                            <span class="person-name">Marcos Vieira</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">LM</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@lucas_m</span>
+                            <span class="person-name">Lucas Mendonca</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">CS</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@carla_s</span>
+                            <span class="person-name">Carla Santos</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;privacy&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Security &gt; Privacy &amp; Data Protection &gt; Customer Data API</span><span class="component-chip"><i class="material-icons">category</i>Services &gt; Customer Accounts &gt; Client Profile Service</span><span class="component-chip"><i class="material-icons">category</i>Services &gt; Customer Accounts &gt; CRM Integrations</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Marcos Vieira - Customer Architecture &amp; API Strategy">marcos_v</span> <span class="code-chip" title="Lucas Mendonca - Customer Account APIs &amp; Client Details Endpoint">lucas_m</span> <span class="code-chip" title="Carla Santos - Data Serialization &amp; API Contracts">carla_s</span> <span class="code-chip" title="Andre Ferreira - Account Database &amp; Repository Services">andre_f</span> <span class="code-chip" title="Patricia Ramos - CRM Integrations &amp; Client Sync">patricia_r</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/services/customer_api/...</span><span class="code-chip">//depot/services/customer_api/controller.py</span><span class="code-chip">//depot/services/customer_api/models/...</span><span class="code-chip">//depot/services/client_accounts/...</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">/api/v2/clients/details</span><span class="endpoint-chip">/api/v2/clients/summary</span><span class="endpoint-chip">/api/v2/clients/preferences</span><span class="endpoint-chip">/api/v2/clients/*</span><span class="endpoint-chip">/api/v2/accounts/*</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Assign all bugs regarding customer account API endpoints (/api/v2/clients/*), unredacted client PII exposures, and CRM data pipeline bugs to this team&#x27;s Primary On-Call (lucas_m). For P0/P1 security incidents, CC the Tech Lead (marcos_v).</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> customer-data-eng@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #customer-data-oncall
+            </span>
+        </div>
+    </article>
+    
+
+    <article class="team-card" data-id="privacy-governance-data" data-department="Information Security &amp; Privacy" data-component="privacy">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>Data Privacy &amp; Compliance Governance</h3>
+                <div class="department-label">Information Security &amp; Privacy</div>
+            </div>
+            <span class="tag-badge">PRIVACY-GOV</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Develops enterprise privacy policy tooling, shared PII redaction filters (PIIMaskingFilter), user data export/deletion workflows (GDPR/CCPA), and regulatory audit logging pipelines.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">RM</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@rachel_m</span>
+                            <span class="person-name">Rachel Meyer</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">OH</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@omar_h</span>
+                            <span class="person-name">Omar Hassan</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">CD</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@chloe_d</span>
+                            <span class="person-name">Chloe Dupont</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;privacy&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Security &gt; Data Privacy Governance &gt; PIIMaskingFilter</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Data Privacy Governance &gt; Audit Logging</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Data Privacy Governance &gt; GDPR Export &amp; Erasure</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Rachel Meyer - Data Governance &amp; Global Privacy Policies">rachel_m</span> <span class="code-chip" title="Omar Hassan - PII Masking Libraries &amp; Redaction Rules">omar_h</span> <span class="code-chip" title="Chloe Dupont - GDPR / CCPA Subject Access Requests">chloe_d</span> <span class="code-chip" title="Felix Zhang - Audit Logging Pipeline">felix_z</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/privacy/...</span><span class="code-chip">//depot/gdpr/...</span><span class="code-chip">//depot/logging/sanitizer/...</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">/api/v1/privacy/export</span><span class="endpoint-chip">/api/v1/privacy/delete</span><span class="endpoint-chip">PIIMaskingFilter Library</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Route defects in the shared PIIMaskingFilter library, GDPR deletion pipeline failures, or privacy policy engine bugs to Primary On-Call (omar_h). Note: Service-specific endpoint implementations belong to their respective domain teams.</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> privacy-compliance@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #privacy-eng
+            </span>
+        </div>
+    </article>
+    
+
+    <article class="team-card" data-id="iam-auth-security" data-department="Information Security &amp; Privacy" data-component="iam">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>Identity &amp; Access Management (IAM)</h3>
+                <div class="department-label">Information Security &amp; Privacy</div>
+            </div>
+            <span class="tag-badge">SEC-IAM</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Owns central authentication APIs, password hashing policies (Argon2id/bcrypt), JWT token issuance/verification, SSO federation, session cookie attributes, and directory RBAC policies.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">SK</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@sarah_k</span>
+                            <span class="person-name">Sarah Kowalski</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">DP</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@david_p</span>
+                            <span class="person-name">David Park</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">JW</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@jenny_w</span>
+                            <span class="person-name">Jenny White</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;iam&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Security &gt; Identity &amp; Access Management &gt; JWT Auth</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Identity &amp; Access Management &gt; OAuth2</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Identity &amp; Access Management &gt; SSO</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Identity &amp; Access Management &gt; Session Security</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Identity &amp; Access Management &gt; Password Reset</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Sarah Kowalski - Auth Architecture &amp; Cryptography">sarah_k</span> <span class="code-chip" title="David Park - JWT Token Infrastructure &amp; Token Verification">david_p</span> <span class="code-chip" title="Jenny White - Session Management &amp; Cookie Security">jenny_w</span> <span class="code-chip" title="Elena Rossi - OAuth2 / SSO Federation">elena_r</span> <span class="code-chip" title="Matthew Brown - Role-Based Access Control (RBAC)">matthew_b</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/identity/...</span><span class="code-chip">//depot/security/auth/...</span><span class="code-chip">//depot/auth_service/...</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">/api/v1/auth</span><span class="endpoint-chip">/api/v1/users</span><span class="endpoint-chip">/api/v1/settings</span><span class="endpoint-chip">/oauth/*</span><span class="endpoint-chip">/sso/*</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Route reports concerning JWT signature flaws, hardcoded signing keys, centralized session hijacking, missing HttpOnly/SameSite flags on central auth cookies, or OAuth redirect vulnerabilities to Primary On-Call (david_p).</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> iam-security-triage@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #iam-auth-oncall
+            </span>
+        </div>
+    </article>
+    
+
+    <article class="team-card" data-id="gateway-traffic-mesh" data-department="Network &amp; Edge Infrastructure" data-component="gateway">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>API Gateway &amp; Edge Infrastructure</h3>
+                <div class="department-label">Network &amp; Edge Infrastructure</div>
+            </div>
+            <span class="tag-badge">GATEWAY-MESH</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Manages edge ingress proxies, TLS certificates, WAF filtering rules, rate limiting, DDoS protections, and microservice traffic routing.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">JR</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@jorge_r</span>
+                            <span class="person-name">Jorge Ramos</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">SB</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@sam_b</span>
+                            <span class="person-name">Sam Becker</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">NG</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@nina_g</span>
+                            <span class="person-name">Nina Gupta</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;gateway&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; API Gateway &amp; Edge &gt; Envoy WAF</span><span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; API Gateway &amp; Edge &gt; Edge Headers &amp; CSP</span><span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; API Gateway &amp; Edge &gt; Rate Limiting Mesh</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Jorge Ramos - Network Architecture &amp; Routing Mesh">jorge_r</span> <span class="code-chip" title="Sam Becker - Reverse Proxy &amp; Load Balancing">sam_b</span> <span class="code-chip" title="Nina Gupta - TLS Termination &amp; WAF Rules">nina_g</span> <span class="code-chip" title="Vikram Sethi - DDoS Mitigation &amp; Rate Limiting">vikram_s</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/gateway/...</span><span class="code-chip">//depot/edge/envoy/...</span><span class="code-chip">//depot/waf/rules/...</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">Edge Reverse Proxy (Envoy)</span><span class="endpoint-chip">WAF Ingress Gateway</span><span class="endpoint-chip">Rate Limiting Mesh</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Assign edge routing defects, WAF bypasses, TLS misconfigurations, or rate limiting failures to Primary On-Call (sam_b).</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> api-gateway-core@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #api-gateway-oncall
+            </span>
+        </div>
+    </article>
+    
+
+    <article class="team-card" data-id="payments-billing-platform" data-department="Financial Engineering &amp; Commerce" data-component="payments">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>Payments &amp; Billing Platform</h3>
+                <div class="department-label">Financial Engineering &amp; Commerce</div>
+            </div>
+            <span class="tag-badge">FIN-PAYMENTS</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Manages monetary transactions, subscription billing, credit-card processing integration, invoice issuance, and PCI-DSS certified cardholder environments.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">CT</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@carlos_t</span>
+                            <span class="person-name">Carlos Torres</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">ML</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@maya_l</span>
+                            <span class="person-name">Maya Lin</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">HA</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@hassan_a</span>
+                            <span class="person-name">Hassan Ali</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;payments&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Security &gt; Financial &amp; Payments Security &gt; Webhook Ingress</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Financial &amp; Payments Security &gt; Cardholder Data Vault</span><span class="component-chip"><i class="material-icons">category</i>Security &gt; Financial &amp; Payments Security &gt; Checkout API</span><span class="component-chip"><i class="material-icons">category</i>Services &gt; Billing &gt; Invoicing &amp; Currency Service</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Carlos Torres - Financial Architecture &amp; Payment Gateways">carlos_t</span> <span class="code-chip" title="Maya Lin - Transaction Processing &amp; Invoicing APIs">maya_l</span> <span class="code-chip" title="Hassan Ali - High-Availability Payment Pipelines">hassan_a</span> <span class="code-chip" title="Bruna Costa - PCI-DSS Compliance &amp; Cardholder Data Protection">bruna_c</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/services/payments/...</span><span class="code-chip">//depot/services/payments/webhook_handler.py</span><span class="code-chip">//depot/billing/...</span><span class="code-chip">//depot/payments/...</span><span class="code-chip">//depot/checkout/...</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">/api/v1/payments/*</span><span class="endpoint-chip">/api/v1/payments/webhook</span><span class="endpoint-chip">/api/v1/billing/*</span><span class="endpoint-chip">/checkout/*</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Route payment failures, double-billing defects, checkout session tampering, or webhook authentication bugs to Primary On-Call (maya_l).</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> payments-core@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #payments-eng-oncall
+            </span>
+        </div>
+    </article>
+    
+
+    <article class="team-card" data-id="cloud-infra-sre" data-department="Site Reliability Engineering" data-component="infra">
+        <div class="card-top">
+            <div class="card-title-group">
+                <h3>Cloud Infrastructure &amp; Container Security (SRE)</h3>
+                <div class="department-label">Site Reliability Engineering</div>
+            </div>
+            <span class="tag-badge">INFRA-SRE</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">Oversees container build definitions (Dockerfile, Docker Compose), rootless execution models, read-only root filesystems, Linux capability dropping, and compute node stability.</p>
+
+            <div>
+                <div class="section-subheading">Key Personnel &amp; On-Call Rotation</div>
+                <ul class="people-list">
+                    <li class="person-row tl">
+                        <span class="person-avatar">DV</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@dmitri_v</span>
+                            <span class="person-name">Dmitri Volkov</span>
+                        </div>
+                        <span class="role-badge tl">Tech Lead (TL)</span>
+                    </li>
+                    <li class="person-row oncall">
+                        <span class="person-avatar">KJ</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@kevin_j</span>
+                            <span class="person-name">Kevin Jones</span>
+                        </div>
+                        <span class="role-badge oncall">Primary On-Call</span>
+                    </li>
+                    <li class="person-row secondary">
+                        <span class="person-avatar">LB</span>
+                        <div class="person-main">
+                            <span class="ldap-link">@laura_b</span>
+                            <span class="person-name">Laura Bianchi</span>
+                        </div>
+                        <span class="role-badge secondary">Secondary On-Call</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-subheading">Broad Component ID &amp; Owned Issue Tracker Components</div>
+                <div class="chips-container">
+                    <span class="filter-chip"><i class="material-icons">filter_alt</i>component:&quot;infra&quot;</span>
+                    <span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; Cloud SRE &amp; Containers &gt; Docker Host</span><span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; Cloud SRE &amp; Containers &gt; Base Image</span><span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; Cloud SRE &amp; Containers &gt; Production Clusters</span><span class="component-chip"><i class="material-icons">category</i>Infrastructure &gt; Cloud SRE &amp; Containers &gt; Secrets Manager</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Team Member LDAPs</div>
+                <div class="chips-container">
+                    <span class="code-chip" title="Dmitri Volkov - Borg/Kube Clusters &amp; Deployment Orchestration">dmitri_v</span> <span class="code-chip" title="Kevin Jones - Production Outages &amp; Infrastructure Incidents">kevin_j</span> <span class="code-chip" title="Laura Bianchi - Docker Hardening, Non-Root Users &amp; Seccomp">laura_b</span> <span class="code-chip" title="Tarik Kaplan - OS Patching &amp; Host Hardening">tarik_k</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Code Paths (Piper / Depot)</div>
+                <div class="chips-container">
+                    <span class="code-chip">//depot/infra/...</span><span class="code-chip">//depot/docker/...</span><span class="code-chip">Dockerfile</span><span class="code-chip">docker-compose.yml</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-subheading">Owned Endpoints &amp; Subsystems</div>
+                <div class="chips-container">
+                    <span class="endpoint-chip">Container Orchestration (Docker / Borg)</span><span class="endpoint-chip">Host OS Hardening</span><span class="endpoint-chip">Health &amp; Telemetry Daemon</span>
+                </div>
+            </div>
+
+            <div class="triage-tip">
+                <i class="material-icons">lightbulb</i>
+                <div><strong>Triage Routing:</strong> Assign container escapes, base image CVEs, docker-compose misconfigurations, or production hardware outages to Primary On-Call (kevin_j).</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span class="contact-info">
+                <i class="material-icons">email</i> cloud-infra-sre@company.com
+            </span>
+            <span class="contact-info">
+                <i class="material-icons">chat</i> #cloud-infra-ops
+            </span>
+        </div>
+    </article>
+    
+        </div>
+
+        <div class="empty-teams" id="noTeams">
+            <i class="material-icons">search_off</i>
+            <strong>No teams match your search.</strong>
+            Try a different keyword or select another department.
+        </div>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById('teamSearchInput');
+        const filterPills = document.querySelectorAll('.filter-pills .pill');
+        const teamCards = document.querySelectorAll('.team-card');
+        const pathLookupInput = document.getElementById('pathLookupInput');
+        const pathLookupBtn = document.getElementById('pathLookupBtn');
+        const lookupBanner = document.getElementById('lookupBanner');
+        const bannerTitle = document.getElementById('bannerTitle');
+        const bannerDetails = document.getElementById('bannerDetails');
+        const dismissBannerBtn = document.getElementById('dismissBannerBtn');
+        const bannerIcon = document.getElementById('bannerIcon');
+        const teamsVisibleCount = document.getElementById('teamsVisibleCount');
+        const noTeams = document.getElementById('noTeams');
+
+        let currentDepartment = 'all';
+
+        function filterTeams() {
+            const query = searchInput.value.toLowerCase().trim();
+            let visible = 0;
+
+            teamCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                const cardDept = card.getAttribute('data-department');
+
+                const matchesQuery = !query || cardText.includes(query);
+                const matchesDept = (currentDepartment === 'all') || (cardDept === currentDepartment);
+
+                if (matchesQuery && matchesDept) {
+                    card.style.display = 'flex';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            teamsVisibleCount.textContent = visible;
+            noTeams.style.display = visible === 0 ? 'block' : 'none';
+        }
+
+        searchInput.addEventListener('input', filterTeams);
+
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                currentDepartment = pill.getAttribute('data-filter');
+                filterTeams();
+            });
+        });
+
+        // Path / Endpoint Lookup via API
+        async function handleLookup() {
+            const target = pathLookupInput.value.trim();
+            if (!target) return;
+
+            try {
+                const res = await fetch(`/api/ownership?path=${encodeURIComponent(target)}`);
+                const data = await res.json();
+
+                if (data.matched && data.team) {
+                    const team = data.team;
+                    bannerTitle.textContent = `Target "${target}" belongs to: ${team.name} (${team.tag})`;
+                    bannerDetails.innerHTML = `
+                        <div class="resolve-grid">
+                            <div class="resolve-field"><span class="resolve-label">Broad Component</span><span class="resolve-value"><code>component:&quot;${team.broad_component || ''}&quot;</code></span></div>
+                            <div class="resolve-field"><span class="resolve-label">Primary On-Call (Assignee)</span><span class="resolve-value"><code>${team.primary_oncall_ldap}</code> (${team.primary_oncall_name})</span></div>
+                            <div class="resolve-field"><span class="resolve-label">Tech Lead</span><span class="resolve-value"><code>${team.tl_ldap}</code> (${team.tl_name})</span></div>
+                            <div class="resolve-field"><span class="resolve-label">Alias</span><span class="resolve-value"><code>${team.email}</code></span></div>
+                        </div>
+                    `;
+                    bannerIcon.textContent = 'verified_user';
+                    lookupBanner.classList.remove('not-found');
+                    lookupBanner.classList.add('show');
+
+                    // Highlight card
+                    teamCards.forEach(card => {
+                        card.classList.remove('highlight');
+                        if (card.getAttribute('data-id') === team.id) {
+                            card.classList.add('highlight');
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                } else {
+                    bannerTitle.textContent = `No direct match found for "${target}"`;
+                    bannerDetails.innerHTML = '<p>Please browse the directory below or try searching by depot directory prefix.</p>';
+                    bannerIcon.textContent = 'help_outline';
+                    lookupBanner.classList.add('not-found', 'show');
+                }
+            } catch (err) {
+                console.error('Error resolving ownership:', err);
+            }
+        }
+
+        pathLookupBtn.addEventListener('click', handleLookup);
+        pathLookupInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLookup();
+        });
+
+        dismissBannerBtn.addEventListener('click', () => {
+            lookupBanner.classList.remove('show');
+        });
+    </script>
+
+    <script>
+    // Static-site stand-in for GET /api/ownership (see scripts/build_pages.py).
+    (function () {
+        const TEAMS = [{"id": "customer-account-platform", "name": "Customer Account & Data Services Platform", "tag": "CUSTOMER-DATA", "broad_component": "privacy", "department": "Core User & Account Infrastructure", "email": "customer-data-eng@company.com", "chat_channel": "#customer-data-oncall", "tl_ldap": "marcos_v", "tl_name": "Marcos Vieira", "primary_oncall_ldap": "lucas_m", "primary_oncall_name": "Lucas Mendonca", "secondary_oncall_ldap": "carla_s", "secondary_oncall_name": "Carla Santos", "members": [{"ldap": "marcos_v", "name": "Marcos Vieira", "role": "Tech Lead Manager", "focus": "Customer Architecture & API Strategy"}, {"ldap": "lucas_m", "name": "Lucas Mendonca", "role": "Senior Software Engineer (On-call Primary)", "focus": "Customer Account APIs & Client Details Endpoint"}, {"ldap": "carla_s", "name": "Carla Santos", "role": "Staff Software Engineer (On-call Secondary)", "focus": "Data Serialization & API Contracts"}, {"ldap": "andre_f", "name": "Andre Ferreira", "role": "Software Engineer", "focus": "Account Database & Repository Services"}, {"ldap": "patricia_r", "name": "Patricia Ramos", "role": "Software Engineer", "focus": "CRM Integrations & Client Sync"}], "owned_paths": ["//depot/services/customer_api/...", "//depot/services/customer_api/controller.py", "//depot/services/customer_api/models/...", "//depot/services/client_accounts/..."], "owned_endpoints": ["/api/v2/clients/details", "/api/v2/clients/summary", "/api/v2/clients/preferences", "/api/v2/clients/*", "/api/v2/accounts/*"], "owned_components": ["Security > Privacy & Data Protection > Customer Data API", "Services > Customer Accounts > Client Profile Service", "Services > Customer Accounts > CRM Integrations"], "description": "Responsible for backend Customer Account API services, client profile data retrieval endpoints (/api/v2/clients/*), customer entity models, and CRM integration layers. Responsible for applying data sanitization before returning customer objects to clients.", "triage_guidelines": "Assign all bugs regarding customer account API endpoints (/api/v2/clients/*), unredacted client PII exposures, and CRM data pipeline bugs to this team's Primary On-Call (lucas_m). For P0/P1 security incidents, CC the Tech Lead (marcos_v)."}, {"id": "privacy-governance-data", "name": "Data Privacy & Compliance Governance", "tag": "PRIVACY-GOV", "broad_component": "privacy", "department": "Information Security & Privacy", "email": "privacy-compliance@company.com", "chat_channel": "#privacy-eng", "tl_ldap": "rachel_m", "tl_name": "Rachel Meyer", "primary_oncall_ldap": "omar_h", "primary_oncall_name": "Omar Hassan", "secondary_oncall_ldap": "chloe_d", "secondary_oncall_name": "Chloe Dupont", "members": [{"ldap": "rachel_m", "name": "Rachel Meyer", "role": "Privacy Engineering Lead", "focus": "Data Governance & Global Privacy Policies"}, {"ldap": "omar_h", "name": "Omar Hassan", "role": "Compliance Specialist (Primary On-call)", "focus": "PII Masking Libraries & Redaction Rules"}, {"ldap": "chloe_d", "name": "Chloe Dupont", "role": "Senior Privacy Engineer", "focus": "GDPR / CCPA Subject Access Requests"}, {"ldap": "felix_z", "name": "Felix Zhang", "role": "Software Engineer", "focus": "Audit Logging Pipeline"}], "owned_paths": ["//depot/privacy/...", "//depot/gdpr/...", "//depot/logging/sanitizer/..."], "owned_endpoints": ["/api/v1/privacy/export", "/api/v1/privacy/delete", "PIIMaskingFilter Library"], "owned_components": ["Security > Data Privacy Governance > PIIMaskingFilter", "Security > Data Privacy Governance > Audit Logging", "Security > Data Privacy Governance > GDPR Export & Erasure"], "description": "Develops enterprise privacy policy tooling, shared PII redaction filters (PIIMaskingFilter), user data export/deletion workflows (GDPR/CCPA), and regulatory audit logging pipelines.", "triage_guidelines": "Route defects in the shared PIIMaskingFilter library, GDPR deletion pipeline failures, or privacy policy engine bugs to Primary On-Call (omar_h). Note: Service-specific endpoint implementations belong to their respective domain teams."}, {"id": "iam-auth-security", "name": "Identity & Access Management (IAM)", "tag": "SEC-IAM", "broad_component": "iam", "department": "Information Security & Privacy", "email": "iam-security-triage@company.com", "chat_channel": "#iam-auth-oncall", "tl_ldap": "sarah_k", "tl_name": "Sarah Kowalski", "primary_oncall_ldap": "david_p", "primary_oncall_name": "David Park", "secondary_oncall_ldap": "jenny_w", "secondary_oncall_name": "Jenny White", "members": [{"ldap": "sarah_k", "name": "Sarah Kowalski", "role": "Principal Security Lead", "focus": "Auth Architecture & Cryptography"}, {"ldap": "david_p", "name": "David Park", "role": "Staff Security Engineer (IAM On-call)", "focus": "JWT Token Infrastructure & Token Verification"}, {"ldap": "jenny_w", "name": "Jenny White", "role": "Senior Security Engineer", "focus": "Session Management & Cookie Security"}, {"ldap": "elena_r", "name": "Elena Rossi", "role": "Security Software Engineer", "focus": "OAuth2 / SSO Federation"}, {"ldap": "matthew_b", "name": "Matthew Brown", "role": "Security Engineer", "focus": "Role-Based Access Control (RBAC)"}], "owned_paths": ["//depot/identity/...", "//depot/security/auth/...", "//depot/auth_service/..."], "owned_endpoints": ["/api/v1/auth", "/api/v1/users", "/api/v1/settings", "/oauth/*", "/sso/*"], "owned_components": ["Security > Identity & Access Management > JWT Auth", "Security > Identity & Access Management > OAuth2", "Security > Identity & Access Management > SSO", "Security > Identity & Access Management > Session Security", "Security > Identity & Access Management > Password Reset"], "description": "Owns central authentication APIs, password hashing policies (Argon2id/bcrypt), JWT token issuance/verification, SSO federation, session cookie attributes, and directory RBAC policies.", "triage_guidelines": "Route reports concerning JWT signature flaws, hardcoded signing keys, centralized session hijacking, missing HttpOnly/SameSite flags on central auth cookies, or OAuth redirect vulnerabilities to Primary On-Call (david_p)."}, {"id": "gateway-traffic-mesh", "name": "API Gateway & Edge Infrastructure", "tag": "GATEWAY-MESH", "broad_component": "gateway", "department": "Network & Edge Infrastructure", "email": "api-gateway-core@company.com", "chat_channel": "#api-gateway-oncall", "tl_ldap": "jorge_r", "tl_name": "Jorge Ramos", "primary_oncall_ldap": "sam_b", "primary_oncall_name": "Sam Becker", "secondary_oncall_ldap": "nina_g", "secondary_oncall_name": "Nina Gupta", "members": [{"ldap": "jorge_r", "name": "Jorge Ramos", "role": "Edge Platform Tech Lead", "focus": "Network Architecture & Routing Mesh"}, {"ldap": "sam_b", "name": "Sam Becker", "role": "Staff SRE (Gateway On-call)", "focus": "Reverse Proxy & Load Balancing"}, {"ldap": "nina_g", "name": "Nina Gupta", "role": "Network Systems Engineer", "focus": "TLS Termination & WAF Rules"}, {"ldap": "vikram_s", "name": "Vikram Sethi", "role": "Security Engineer", "focus": "DDoS Mitigation & Rate Limiting"}], "owned_paths": ["//depot/gateway/...", "//depot/edge/envoy/...", "//depot/waf/rules/..."], "owned_endpoints": ["Edge Reverse Proxy (Envoy)", "WAF Ingress Gateway", "Rate Limiting Mesh"], "owned_components": ["Infrastructure > API Gateway & Edge > Envoy WAF", "Infrastructure > API Gateway & Edge > Edge Headers & CSP", "Infrastructure > API Gateway & Edge > Rate Limiting Mesh"], "description": "Manages edge ingress proxies, TLS certificates, WAF filtering rules, rate limiting, DDoS protections, and microservice traffic routing.", "triage_guidelines": "Assign edge routing defects, WAF bypasses, TLS misconfigurations, or rate limiting failures to Primary On-Call (sam_b)."}, {"id": "payments-billing-platform", "name": "Payments & Billing Platform", "tag": "FIN-PAYMENTS", "broad_component": "payments", "department": "Financial Engineering & Commerce", "email": "payments-core@company.com", "chat_channel": "#payments-eng-oncall", "tl_ldap": "carlos_t", "tl_name": "Carlos Torres", "primary_oncall_ldap": "maya_l", "primary_oncall_name": "Maya Lin", "secondary_oncall_ldap": "hassan_a", "secondary_oncall_name": "Hassan Ali", "members": [{"ldap": "carlos_t", "name": "Carlos Torres", "role": "Engineering Lead", "focus": "Financial Architecture & Payment Gateways"}, {"ldap": "maya_l", "name": "Maya Lin", "role": "Senior Billing Engineer (Primary On-call)", "focus": "Transaction Processing & Invoicing APIs"}, {"ldap": "hassan_a", "name": "Hassan Ali", "role": "Payments SRE", "focus": "High-Availability Payment Pipelines"}, {"ldap": "bruna_c", "name": "Bruna Costa", "role": "Security & Compliance Lead", "focus": "PCI-DSS Compliance & Cardholder Data Protection"}], "owned_paths": ["//depot/services/payments/...", "//depot/services/payments/webhook_handler.py", "//depot/billing/...", "//depot/payments/...", "//depot/checkout/..."], "owned_endpoints": ["/api/v1/payments/*", "/api/v1/payments/webhook", "/api/v1/billing/*", "/checkout/*"], "owned_components": ["Security > Financial & Payments Security > Webhook Ingress", "Security > Financial & Payments Security > Cardholder Data Vault", "Security > Financial & Payments Security > Checkout API", "Services > Billing > Invoicing & Currency Service"], "description": "Manages monetary transactions, subscription billing, credit-card processing integration, invoice issuance, and PCI-DSS certified cardholder environments.", "triage_guidelines": "Route payment failures, double-billing defects, checkout session tampering, or webhook authentication bugs to Primary On-Call (maya_l)."}, {"id": "cloud-infra-sre", "name": "Cloud Infrastructure & Container Security (SRE)", "tag": "INFRA-SRE", "broad_component": "infra", "department": "Site Reliability Engineering", "email": "cloud-infra-sre@company.com", "chat_channel": "#cloud-infra-ops", "tl_ldap": "dmitri_v", "tl_name": "Dmitri Volkov", "primary_oncall_ldap": "kevin_j", "primary_oncall_name": "Kevin Jones", "secondary_oncall_ldap": "laura_b", "secondary_oncall_name": "Laura Bianchi", "members": [{"ldap": "dmitri_v", "name": "Dmitri Volkov", "role": "Infrastructure SRE TL", "focus": "Borg/Kube Clusters & Deployment Orchestration"}, {"ldap": "kevin_j", "name": "Kevin Jones", "role": "Principal Incident Commander (Primary On-call)", "focus": "Production Outages & Infrastructure Incidents"}, {"ldap": "laura_b", "name": "Laura Bianchi", "role": "Container Security SRE", "focus": "Docker Hardening, Non-Root Users & Seccomp"}, {"ldap": "tarik_k", "name": "Tarik Kaplan", "role": "Systems Engineer", "focus": "OS Patching & Host Hardening"}], "owned_paths": ["//depot/infra/...", "//depot/docker/...", "Dockerfile", "docker-compose.yml"], "owned_endpoints": ["Container Orchestration (Docker / Borg)", "Host OS Hardening", "Health & Telemetry Daemon"], "owned_components": ["Infrastructure > Cloud SRE & Containers > Docker Host", "Infrastructure > Cloud SRE & Containers > Base Image", "Infrastructure > Cloud SRE & Containers > Production Clusters", "Infrastructure > Cloud SRE & Containers > Secrets Manager"], "description": "Oversees container build definitions (Dockerfile, Docker Compose), rootless execution models, read-only root filesystems, Linux capability dropping, and compute node stability.", "triage_guidelines": "Assign container escapes, base image CVEs, docker-compose misconfigurations, or production hardware outages to Primary On-Call (kevin_j)."}];
+
+        // Mirrors resolve_ownership() in apps/team_directory/data.py.
+        function resolveOwnership(pathOrEndpoint) {
+            if (!pathOrEndpoint) return null;
+            const target = pathOrEndpoint.trim().toLowerCase();
+            let bestMatch = null;
+            let bestScore = 0;
+            for (const team of TEAMS) {
+                let score = 0;
+                for (const p of team.owned_paths) {
+                    const pClean = p.replace('//depot/', '').replace('/...', '').toLowerCase();
+                    if (p.toLowerCase().includes(target) || target.includes(pClean) || pClean.includes(target)) {
+                        score = Math.max(score, 100);
+                    }
+                }
+                for (const ep of team.owned_endpoints) {
+                    const epClean = ep.replace('/*', '').toLowerCase();
+                    if (target === epClean || (epClean && target.includes(epClean))) {
+                        score = Math.max(score, 90);
+                    }
+                }
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = team;
+                }
+            }
+            return bestMatch;
+        }
+
+        const realFetch = window.fetch.bind(window);
+        window.fetch = function (url, opts) {
+            const u = new URL(String(url), window.location.href);
+            if (!String(url).startsWith('/api/ownership')) return realFetch(url, opts);
+            const target = u.searchParams.get('path') || u.searchParams.get('endpoint') || '';
+            const team = resolveOwnership(target);
+            const result = team ? {
+                matched: true,
+                query: target,
+                team: team,
+                broad_component: team.broad_component || '',
+                broad_component_filter: `component:"${team.broad_component || ''}"`,
+                suggested_assignee_ldap: team.primary_oncall_ldap,
+                suggested_assignee_name: team.primary_oncall_name,
+                tech_lead_ldap: team.tl_ldap,
+                escalation_alias: team.email,
+            } : { matched: false, query: target, message: 'No direct ownership match found' };
+            return Promise.resolve(new Response(JSON.stringify(result), {
+                status: 200, headers: { 'Content-Type': 'application/json' },
+            }));
+        };
+    })();
+    </script>
+</body>
+</html>

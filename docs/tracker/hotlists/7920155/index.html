@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Enterprise Bug & Vulnerability Inventory · Issue Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../tracker/static/buganizer.css">
+</head>
+<body>
+    <!-- Top App Bar -->
+    <header class="app-bar">
+        <a href="../../../tracker/hotlists/5829104/" class="brand">
+            <span class="brand-mark"><i class="material-icons">bug_report</i></span>
+            <span class="brand-name">Issue Tracker</span>
+        </a>
+
+        <nav class="app-nav" aria-label="Hotlists">
+            <a href="../../../tracker/hotlists/5829104/" class="app-nav-link " title="Active Incident Triage Queue (hotlist:5829104)">
+                <i class="material-icons">priority_high</i>
+                <span class="nav-label">Triage Queue</span>
+                <span class="nav-count">2</span>
+            </a>
+            <a href="../../../tracker/hotlists/7920155/" class="app-nav-link active" title="Enterprise Vulnerability Inventory &amp; Backlog (hotlist:7920155)">
+                <i class="material-icons">inventory_2</i>
+                <span class="nav-label">Inventory &amp; Backlog</span>
+                <span class="nav-count">24</span>
+            </a>
+        </nav>
+
+        <div class="app-bar-right">
+            <a href="../../../directory/" target="_blank" class="tool-link" title="Open Team Directory to find service owners">
+                <i class="material-icons">corporate_fare</i>
+                <span>Team &amp; Ownership Directory</span>
+                <i class="material-icons ext-icon">open_in_new</i>
+            </a>
+            <div class="user-avatar" title="Logged in as security-triage@company.com">SE</div>
+        </div>
+    </header>
+
+    <main class="page">
+        <!-- Hotlist Header -->
+        <section class="page-header">
+            <div class="breadcrumbs">
+                <a href="../../../tracker/hotlists/5829104/">Hotlists</a>
+                <i class="material-icons">chevron_right</i>
+                <span class="current">hotlist:7920155</span>
+            </div>
+            <div class="page-title-row">
+                <div class="page-icon ">
+                    <i class="material-icons">inventory_2</i>
+                </div>
+                <div>
+                    <h1 class="page-title">Enterprise Bug & Vulnerability Inventory</h1>
+                    <p class="page-desc">Comprehensive inventory of enterprise vulnerabilities, incidents, and bugs across all systems. Use the search bar to query and filter by status, assignee, priority, severity, component, or keyword.</p>
+                </div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-label">Owner</span>
+                    <span class="stat-value" title="security-triage@company.com">security-triage@company.com</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total in hotlist</span>
+                    <span class="stat-value big">24</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Matching filter</span>
+                    <span class="stat-value big" id="matchingCountBadge">24</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Status</span>
+                    <span class="stat-value"><span class="status-chip status-active">Active Triage</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issues Panel -->
+        <section class="card table-panel">
+            <div class="table-toolbar">
+                <div class="table-search">
+                    <i class="material-icons search-input-icon">search</i>
+                    <input type="text" id="hotlistFilterInput" placeholder="Search bugs" value="" autofocus autocomplete="off" spellcheck="false">
+                    <button type="button" id="tableClearBtn" class="search-clear-icon" title="Clear filter" style="display: none;">
+                        <i class="material-icons" style="font-size: 16px;">close</i>
+                    </button>
+                </div>
+                <span class="table-results-counter" id="tableResultsCounter">Showing <strong>24</strong> of 24 bugs</span>
+                <button class="btn" onclick="clearAllFilters()">
+                    <i class="material-icons">restart_alt</i> Clear Filter
+                </button>
+                <button class="btn ghost" onclick="window.location.reload()" title="Refresh">
+                    <i class="material-icons">refresh</i>
+                </button>
+            </div>
+
+            <!-- Search Syntax Helper -->
+            <div class="search-syntax-help">
+                <span class="syntax-label"><i class="material-icons">manage_search</i> Query syntax</span>
+                <span class="syntax-chip"><code>status:&lt;open|assigned|triaged|blocked|fixed&gt;</code></span>
+                <span class="syntax-chip"><code>assignee:&lt;ldap|none&gt;</code></span>
+                <span class="syntax-chip"><code>priority:&lt;p0|p1|p2|p3&gt;</code></span>
+                <span class="syntax-chip"><code>component:"&lt;iam|payments|privacy|infra|gateway&gt;"</code></span>
+                <span class="syntax-chip"><code>&lt;AND | OR | NOT | ( )&gt;</code></span>
+                <span class="syntax-chip"><code>"&lt;exact phrase&gt;"</code></span>
+            </div>
+
+            <!-- Issues Table -->
+            <div class="table-scroll">
+                <table class="hotlist-table" id="hotlistTable">
+                    <thead>
+                        <tr>
+                            <th class="col-check"><input type="checkbox" disabled></th>
+                            <th>Issue ID</th>
+                            <th>Priority</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Title &amp; Summary</th>
+                            <th>Assignee</th>
+                            <th>Last Modified</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issuesTableBody">
+                        
+        <tr  data-id="782910401" data-status="assigned" data-assignee="sam_b" data-priority="p0" data-severity="s0" data-component="infrastructure &gt; api gateway &amp; edge &gt; envoy waf" data-type="vulnerability (edge / waf bypass)" data-hotlists="7920155 p0-critical-security edge-ingress" data-search="782910401 b/782910401 [security p0 outage] edge envoy gateway waf rule bypass on /oauth ingress route assigned p0 s0 vulnerability (edge / waf bypass) infrastructure &gt; api gateway &amp; edge &gt; envoy waf sec-ops@company.com sam_b october 21, 2026 23:59 utc (emergency sla: 6h) october 21, 2026 06:00 utc october 21, 2026 08:10 utc 7920155 p0-critical-security edge-ingress waf bypass vulnerability identified in envoy edge proxy filters where percent-encoded null bytes in url path bypass rate-limiting and ip restriction filters. /oauth/* //depot/edge/envoy/filters/waf.cc waf bypass rule 4091 curl -x post &quot;https://gateway.internal/oauth%00/token&quot; {&quot;status&quot;: &quot;bypassed_200&quot;} unrestricted authentication brute-force across public endpoints. p0/s0 emergency patch within 6 hours. sec-ops@company.com p0 declared. null-byte encoding in envoy proxy bypasses waf inspection. october 21, 2026 06:00 utc #1 sam_b@company.com working on immediate envoy hotfix filter to reject malformed path encodings. october 21, 2026 08:10 utc #2 782910401 b/782910401 [security p0 outage] edge envoy gateway waf rule bypass on /oauth ingress route assigned p0 s0 vulnerability (edge / waf bypass) infrastructure &gt; api gateway &amp; edge &gt; envoy waf sec-ops@company.com sam_b october 21, 2026 23:59 utc (emergency sla: 6h) october 21, 2026 06:00 utc october 21, 2026 08:10 utc 7920155 p0-critical-security edge-ingress waf bypass vulnerability identified in envoy edge proxy filters where percent-encoded null bytes in url path bypass rate-limiting and ip restriction filters. /oauth/* //depot/edge/envoy/filters/waf.cc waf bypass rule 4091 curl -x post &quot;https://gateway.internal/oauth%00/token&quot; {&quot;status&quot;: &quot;bypassed_200&quot;} unrestricted authentication brute-force across public endpoints. p0/s0 emergency patch within 6 hours. sec-ops@company.com p0 declared. null-byte encoding in envoy proxy bypasses waf inspection. october 21, 2026 06:00 utc #1 sam_b@company.com working on immediate envoy hotfix filter to reject malformed path encodings. october 21, 2026 08:10 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/782910401/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/782910401</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p0">P0</span></td>
+            <td><span class="level-badge severity-s0">S0</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/782910401/" class="bug-row-title">[Security P0 Outage] Edge Envoy Gateway WAF Rule Bypass on /oauth Ingress Route</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; API Gateway &amp; Edge &gt; Envoy WAF</span>
+                    <code class="bug-row-endpoint">/oauth/*</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>sa</span>@sam_b</span></td>
+            <td class="col-date">October 21, 2026 08:10 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="543338174" data-status="assigned" data-assignee="maya_l" data-priority="p1" data-severity="s1" data-component="security &gt; financial &amp; payments security &gt; webhook ingress" data-type="vulnerability (financial / webhook forgery)" data-hotlists="5829104 7920155 p1-security-incident pci-dss-review payment-gateway" data-search="543338174 b/543338174 [internal security finding] insecure webhook signature verification in payments webhook handler (/api/v1/payments/webhook) assigned p1 s1 vulnerability (financial / webhook forgery) security &gt; financial &amp; payments security &gt; webhook ingress johndoe@company.com (john doe - internal privacy assurance) maya_l october 23, 2026 (approaching slo deadline - 2 days remaining) october 17, 2026 14:00 utc october 18, 2026 14:20 utc 5829104 7920155 p1-security-incident pci-dss-review payment-gateway during an internal security review of the payments platform, privacy &amp; security assurance discovered that the payment callback handler at &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; accepts incoming transaction status notifications without validating the cryptographic hmac-sha256 signature passed in the &lt;code&gt;x-signature&lt;/code&gt; http header. /api/v1/payments/webhook //depot/services/payments/webhook_handler.py &lt;code&gt;x-signature&lt;/code&gt; header is parsed but never cryptographically verified against the shared secret key. &lt;code&gt;transaction_id&lt;/code&gt; and &lt;code&gt;status&lt;/code&gt; accepted from arbitrary unauthenticated post callers. &lt;code&gt;payment_amount&lt;/code&gt; and &lt;code&gt;settlement_status&lt;/code&gt; can be forged to complete orders without actual payment. curl -x post &quot;https://payments.enterprise.internal/api/v1/payments/webhook&quot; \
+  -h &quot;content-type: application/json&quot; \
+  -d &#x27;{&quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;order_id&quot;: &quot;ord_8812&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;amount_paid&quot;: 450.00}&#x27; {
+  &quot;status&quot;: &quot;ack&quot;,
+  &quot;transaction_id&quot;: &quot;tx_99214a&quot;,
+  &quot;message&quot;: &quot;payment confirmed and order ord_8812 marked as settled.&quot;
+} critical financial security risk. an attacker or malicious party can forge arbitrary payment confirmation webhooks to settle unpaid invoices or unlock premium services without completing actual payment gateway transactions. p1/s1 financial &amp; payment infrastructure vulnerability: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with payment gateway security standards. johndoe@company.com hi security triage,
+
+we discovered that the payments webhook handler at &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; does not verify hmac-sha256 signatures before updating transaction statuses in the database. anyone on the network can post fake payment success events.
+
+please see the report description above for reproduction curl and details. october 17, 2026 14:00 utc #1 security-triage@company.com assigning ticket to &lt;strong&gt;@david_p&lt;/strong&gt; (iam &amp; auth security) to investigate authentication controls on &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;. october 17, 2026 14:30 utc #2 security-triage@company.com hi &lt;strong&gt;@david_p&lt;/strong&gt;, checking in to see if you are the correct person to oversee this issue and if you have context on what is going on with &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;? october 18, 2026 10:15 utc #3 david_p@company.com hi security triage,
+
+i do not own nor work on the payments &amp; billing services or the &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; endpoint. my team (iam &amp; access management) only maintains central authentication tokens and sso infrastructure (&lt;code&gt;//depot/identity/...&lt;/code&gt;).
+
+per the team directory, &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; belongs to payments &amp; billing platform. reassigning ticket to &lt;strong&gt;@maya_l&lt;/strong&gt; (primary on-call).
+
+thanks,
+david park (iam security) october 18, 2026 11:30 utc #4 maya_l@company.com thanks david. confirming i am the correct owner for payments &amp; billing platform and &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;. acknowledging the p1 finding. i will investigate the hmac signature verification logic and prepare a hotfix pr today/tomorrow. october 18, 2026 14:20 utc #5 543338174 b/543338174 [internal security finding] insecure webhook signature verification in payments webhook handler (/api/v1/payments/webhook) assigned p1 s1 vulnerability (financial / webhook forgery) security &gt; financial &amp; payments security &gt; webhook ingress johndoe@company.com (john doe - internal privacy assurance) maya_l october 23, 2026 (approaching slo deadline - 2 days remaining) october 17, 2026 14:00 utc october 18, 2026 14:20 utc 5829104 7920155 p1-security-incident pci-dss-review payment-gateway during an internal security review of the payments platform, privacy &amp; security assurance discovered that the payment callback handler at /api/v1/payments/webhook accepts incoming transaction status notifications without validating the cryptographic hmac-sha256 signature passed in the x-signature http header. /api/v1/payments/webhook //depot/services/payments/webhook_handler.py x-signature header is parsed but never cryptographically verified against the shared secret key. transaction_id and status accepted from arbitrary unauthenticated post callers. payment_amount and settlement_status can be forged to complete orders without actual payment. curl -x post &quot;https://payments.enterprise.internal/api/v1/payments/webhook&quot; \ -h &quot;content-type: application/json&quot; \ -d &#x27;{&quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;order_id&quot;: &quot;ord_8812&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;amount_paid&quot;: 450.00}&#x27; { &quot;status&quot;: &quot;ack&quot;, &quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;message&quot;: &quot;payment confirmed and order ord_8812 marked as settled.&quot; } critical financial security risk. an attacker or malicious party can forge arbitrary payment confirmation webhooks to settle unpaid invoices or unlock premium services without completing actual payment gateway transactions. p1/s1 financial &amp; payment infrastructure vulnerability: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with payment gateway security standards. johndoe@company.com hi security triage, we discovered that the payments webhook handler at /api/v1/payments/webhook does not verify hmac-sha256 signatures before updating transaction statuses in the database. anyone on the network can post fake payment success events. please see the report description above for reproduction curl and details. october 17, 2026 14:00 utc #1 security-triage@company.com assigning ticket to @david_p (iam &amp; auth security) to investigate authentication controls on /api/v1/payments/webhook . october 17, 2026 14:30 utc #2 security-triage@company.com hi @david_p , checking in to see if you are the correct person to oversee this issue and if you have context on what is going on with /api/v1/payments/webhook ? october 18, 2026 10:15 utc #3 david_p@company.com hi security triage, i do not own nor work on the payments &amp; billing services or the /api/v1/payments/webhook endpoint. my team (iam &amp; access management) only maintains central authentication tokens and sso infrastructure ( //depot/identity/... ). per the team directory, /api/v1/payments/webhook belongs to payments &amp; billing platform. reassigning ticket to @maya_l (primary on-call). thanks, david park (iam security) october 18, 2026 11:30 utc #4 maya_l@company.com thanks david. confirming i am the correct owner for payments &amp; billing platform and /api/v1/payments/webhook . acknowledging the p1 finding. i will investigate the hmac signature verification logic and prepare a hotfix pr today/tomorrow. october 18, 2026 14:20 utc #5">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/543338174/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/543338174</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/543338174/" class="bug-row-title">[Internal Security Finding] Insecure Webhook Signature Verification in Payments Webhook Handler (/api/v1/payments/webhook)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Financial &amp; Payments Security &gt; Webhook Ingress</span>
+                    <code class="bug-row-endpoint">/api/v1/payments/webhook</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ma</span>@maya_l</span></td>
+            <td class="col-date">October 18, 2026 14:20 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="618294710" data-status="triaged" data-assignee="unassigned" data-priority="p1" data-severity="s1" data-component="security &gt; privacy &amp; data protection &gt; customer data api" data-type="vulnerability (internal privacy / pii leakage)" data-hotlists="5829104 7920155 p1-security-incident gdpr-review internal-audit-2026" data-search="618294710 b/618294710 [internal security finding] customer account api (/api/v2/clients/details) leaking sensitive client pii (ssn, home address, phone) in unauthenticated responses triaged p1 s1 vulnerability (internal privacy / pii leakage) security &gt; privacy &amp; data protection &gt; customer data api johndoe@company.com (john doe - internal privacy assurance) october 23, 2026 (target: 48h sla) october 20, 2026 18:00 utc october 20, 2026 18:30 utc 5829104 7920155 p1-security-incident gdpr-review internal-audit-2026 during an internal security and privacy assessment of the customer account platform, privacy assurance identified that the customer account data api endpoint &lt;code&gt;/api/v2/clients/{client_id}/details&lt;/code&gt; returns unredacted personally identifiable information (pii) including full social security numbers (ssn), cleartext residential addresses, mobile numbers, and dates of birth without verifying field-level access permissions or applying data masking filters. /api/v2/clients/details //depot/services/customer_api/controller.py &lt;code&gt;ssn&lt;/code&gt; (full 9-digit social security number in plaintext) &lt;code&gt;residential_address&lt;/code&gt; (street address, city, postal code) &lt;code&gt;phone_number&lt;/code&gt; (primary mobile phone) &lt;code&gt;date_of_birth&lt;/code&gt; (client birthdate: yyyy-mm-dd) &lt;code&gt;billing_email&lt;/code&gt; (personal contact email) curl -x get &quot;https://api.enterprise.internal/api/v2/clients/489201a/details&quot; \
+  -h &quot;accept: application/json&quot; {
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;client_id&quot;: &quot;client_489201a&quot;,
+  &quot;full_name&quot;: &quot;john doe&quot;,
+  &quot;ssn&quot;: &quot;987-65-4321&quot;,
+  &quot;date_of_birth&quot;: &quot;1985-04-12&quot;,
+  &quot;phone_number&quot;: &quot;+1-555-019-2834&quot;,
+  &quot;residential_address&quot;: &quot;742 evergreen terrace, springfield, or 97477&quot;,
+  &quot;billing_email&quot;: &quot;johndoe@example.com&quot;,
+  &quot;account_tier&quot;: &quot;enterprise_gold&quot;
+} mass exposure of sensitive customer pii without masking. direct violation of internal data protection policy, gdpr article 32, and ccpa, presenting high regulatory compliance and data breach risks. critical p1/s1 pii exposure: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with enterprise data protection policy. johndoe@company.com hi security triage,
+
+during our q3 internal privacy audit of user-facing microservices, we noticed a critical pii data leakage in the customer account api (&lt;code&gt;/api/v2/clients/details&lt;/code&gt;). the endpoint returns raw database objects with unmasked ssns, residential addresses, and phone numbers.
+
+please see the report description above for reproduction curl and sample json payload. october 20, 2026 18:00 utc #1 security-triage@company.com acknowledging report and confirming p1/s1 classification. currently looking up the owning team in the service ownership directory to route to the customer account primary on-call. october 20, 2026 18:30 utc #2 618294710 b/618294710 [internal security finding] customer account api (/api/v2/clients/details) leaking sensitive client pii (ssn, home address, phone) in unauthenticated responses triaged p1 s1 vulnerability (internal privacy / pii leakage) security &gt; privacy &amp; data protection &gt; customer data api johndoe@company.com (john doe - internal privacy assurance) october 23, 2026 (target: 48h sla) october 20, 2026 18:00 utc october 20, 2026 18:30 utc 5829104 7920155 p1-security-incident gdpr-review internal-audit-2026 during an internal security and privacy assessment of the customer account platform, privacy assurance identified that the customer account data api endpoint /api/v2/clients/{client_id}/details returns unredacted personally identifiable information (pii) including full social security numbers (ssn), cleartext residential addresses, mobile numbers, and dates of birth without verifying field-level access permissions or applying data masking filters. /api/v2/clients/details //depot/services/customer_api/controller.py ssn (full 9-digit social security number in plaintext) residential_address (street address, city, postal code) phone_number (primary mobile phone) date_of_birth (client birthdate: yyyy-mm-dd) billing_email (personal contact email) curl -x get &quot;https://api.enterprise.internal/api/v2/clients/489201a/details&quot; \ -h &quot;accept: application/json&quot; { &quot;status&quot;: &quot;success&quot;, &quot;client_id&quot;: &quot;client_489201a&quot;, &quot;full_name&quot;: &quot;john doe&quot;, &quot;ssn&quot;: &quot;987-65-4321&quot;, &quot;date_of_birth&quot;: &quot;1985-04-12&quot;, &quot;phone_number&quot;: &quot;+1-555-019-2834&quot;, &quot;residential_address&quot;: &quot;742 evergreen terrace, springfield, or 97477&quot;, &quot;billing_email&quot;: &quot;johndoe@example.com&quot;, &quot;account_tier&quot;: &quot;enterprise_gold&quot; } mass exposure of sensitive customer pii without masking. direct violation of internal data protection policy, gdpr article 32, and ccpa, presenting high regulatory compliance and data breach risks. critical p1/s1 pii exposure: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with enterprise data protection policy. johndoe@company.com hi security triage, during our q3 internal privacy audit of user-facing microservices, we noticed a critical pii data leakage in the customer account api ( /api/v2/clients/details ). the endpoint returns raw database objects with unmasked ssns, residential addresses, and phone numbers. please see the report description above for reproduction curl and sample json payload. october 20, 2026 18:00 utc #1 security-triage@company.com acknowledging report and confirming p1/s1 classification. currently looking up the owning team in the service ownership directory to route to the customer account primary on-call. october 20, 2026 18:30 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/618294710/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/618294710</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-triaged">Triaged</span></td>
+            <td>
+                <a href="../../../tracker/issues/618294710/" class="bug-row-title">[Internal Security Finding] Customer Account API (/api/v2/clients/details) leaking sensitive client PII (SSN, home address, phone) in unauthenticated responses</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Privacy &amp; Data Protection &gt; Customer Data API</span>
+                    <code class="bug-row-endpoint">/api/v2/clients/details</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip unassigned'>Unassigned</span></td>
+            <td class="col-date">October 20, 2026 18:30 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="491028472" data-status="assigned" data-assignee="david_p" data-priority="p1" data-severity="s1" data-component="security &gt; identity &amp; access management &gt; jwt auth" data-type="vulnerability (authentication / jwt)" data-hotlists="7920155 auth-security jwt-hardening" data-search="491028472 b/491028472 [security p1] jwt token signature verification bypass via &#x27;none&#x27; algorithm in auth service assigned p1 s1 vulnerability (authentication / jwt) security &gt; identity &amp; access management &gt; jwt auth appsec-audit@company.com david_p october 24, 2026 (target: 48h sla) october 19, 2026 15:45 utc october 20, 2026 11:20 utc 7920155 auth-security jwt-hardening jwt verification parser accepts tokens with &#x27;alg&#x27;: &#x27;none&#x27;, allowing arbitrary user impersonation if signature is omitted. /api/v1/auth/verify //depot/auth_service/jwt_validator.py authorization header token header parsing curl -h &quot;authorization: bearer eyjhbgcioijub25lin0...&quot; {&quot;valid&quot;: true, &quot;user&quot;: &quot;admin&quot;} account takeover and administrative authorization bypass. p1/s1 48h remediation. appsec-audit@company.com critical jwt library allows &#x27;none&#x27; algorithm by default. october 19, 2026 15:45 utc #1 491028472 b/491028472 [security p1] jwt token signature verification bypass via &#x27;none&#x27; algorithm in auth service assigned p1 s1 vulnerability (authentication / jwt) security &gt; identity &amp; access management &gt; jwt auth appsec-audit@company.com david_p october 24, 2026 (target: 48h sla) october 19, 2026 15:45 utc october 20, 2026 11:20 utc 7920155 auth-security jwt-hardening jwt verification parser accepts tokens with &#x27;alg&#x27;: &#x27;none&#x27;, allowing arbitrary user impersonation if signature is omitted. /api/v1/auth/verify //depot/auth_service/jwt_validator.py authorization header token header parsing curl -h &quot;authorization: bearer eyjhbgcioijub25lin0...&quot; {&quot;valid&quot;: true, &quot;user&quot;: &quot;admin&quot;} account takeover and administrative authorization bypass. p1/s1 48h remediation. appsec-audit@company.com critical jwt library allows &#x27;none&#x27; algorithm by default. october 19, 2026 15:45 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/491028472/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/491028472</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/491028472/" class="bug-row-title">[Security P1] JWT Token Signature Verification Bypass via &#x27;none&#x27; Algorithm in Auth Service</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Identity &amp; Access Management &gt; JWT Auth</span>
+                    <code class="bug-row-endpoint">/api/v1/auth/verify</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>da</span>@david_p</span></td>
+            <td class="col-date">October 20, 2026 11:20 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="918204918" data-status="assigned" data-assignee="david_p" data-priority="p1" data-severity="s1" data-component="security &gt; identity &amp; access management &gt; oauth2" data-type="vulnerability (authentication / oauth)" data-hotlists="7920155 p1-security-incident auth-security oauth-security" data-search="918204918 b/918204918 [security p1] oauth2 redirect uri validation bypass in mobile authorization flow (/oauth/authorize) assigned p1 s1 vulnerability (authentication / oauth) security &gt; identity &amp; access management &gt; oauth2 appsec-external@bugbounty.internal (external bounty submission) david_p october 22, 2026 (approaching slo deadline - 1 day remaining) october 17, 2026 11:00 utc october 18, 2026 16:45 utc 7920155 p1-security-incident auth-security oauth-security security research report submitted via the external bug bounty program identified that the oauth2 authorization server at &lt;code&gt;/oauth/authorize&lt;/code&gt; performs unanchored regex suffix matching on the &lt;code&gt;redirect_uri&lt;/code&gt; parameter. an attacker can register domains such as &lt;code&gt;https://auth.company.com.attacker.com/callback&lt;/code&gt; or use url path manipulation to steal authorization codes and tokens during mobile and web sso handshakes. /oauth/authorize //depot/auth_service/oauth_validator.py &lt;code&gt;redirect_uri&lt;/code&gt; validation regex: &lt;code&gt;auth\.company\.com&lt;/code&gt; oauth2 authorization codes leaked in http referer / query parameters to untrusted redirect uris user access tokens and refresh tokens susceptible to interception curl -i &quot;https://auth.enterprise.internal/oauth/authorize?client_id=mobile_app_v2&amp;response_type=code&amp;redirect_uri=https://auth.company.com.attacker.com/callback&amp;state=xyz123&quot; http/1.1 302 found
+location: https://auth.company.com.attacker.com/callback?code=auth_code_99182a&amp;state=xyz123 high-severity authentication compromise. enables full authorization code theft and user account takeover through malicious link clicks. p1/s1 identity &amp; authentication vulnerability: resolution required within 48 hours of initial triage (target due date: october 22, 2026 18:00 utc). appsec-external@bugbounty.internal reporting p1 authorization bypass flaw in &lt;code&gt;/oauth/authorize&lt;/code&gt;.
+
+the redirect uri check uses loose regex pattern matching without anchoring to hostname boundaries. supplying &lt;code&gt;redirect_uri=https://auth.company.com.attacker.com&lt;/code&gt; successfully issues authorization codes to an attacker-controlled endpoint.
+
+see report details above for repro. october 17, 2026 11:00 utc #1 security-triage@company.com triaged and verified finding. assigning to &lt;strong&gt;@david_p&lt;/strong&gt; (iam &amp; auth security) for urgent patch. october 17, 2026 11:30 utc #2 david_p@company.com acknowledging finding. confirmed the flawed regex in &lt;code&gt;oauth_validator.py&lt;/code&gt;. i will implement strict hostname allowlist parsing against registered client redirect uris and push the patch tomorrow. october 18, 2026 16:45 utc #3 918204918 b/918204918 [security p1] oauth2 redirect uri validation bypass in mobile authorization flow (/oauth/authorize) assigned p1 s1 vulnerability (authentication / oauth) security &gt; identity &amp; access management &gt; oauth2 appsec-external@bugbounty.internal (external bounty submission) david_p october 22, 2026 (approaching slo deadline - 1 day remaining) october 17, 2026 11:00 utc october 18, 2026 16:45 utc 7920155 p1-security-incident auth-security oauth-security security research report submitted via the external bug bounty program identified that the oauth2 authorization server at /oauth/authorize performs unanchored regex suffix matching on the redirect_uri parameter. an attacker can register domains such as https://auth.company.com.attacker.com/callback or use url path manipulation to steal authorization codes and tokens during mobile and web sso handshakes. /oauth/authorize //depot/auth_service/oauth_validator.py redirect_uri validation regex: auth\.company\.com oauth2 authorization codes leaked in http referer / query parameters to untrusted redirect uris user access tokens and refresh tokens susceptible to interception curl -i &quot;https://auth.enterprise.internal/oauth/authorize?client_id=mobile_app_v2&amp;response_type=code&amp;redirect_uri=https://auth.company.com.attacker.com/callback&amp;state=xyz123&quot; http/1.1 302 found location: https://auth.company.com.attacker.com/callback?code=auth_code_99182a&amp;state=xyz123 high-severity authentication compromise. enables full authorization code theft and user account takeover through malicious link clicks. p1/s1 identity &amp; authentication vulnerability: resolution required within 48 hours of initial triage (target due date: october 22, 2026 18:00 utc). appsec-external@bugbounty.internal reporting p1 authorization bypass flaw in /oauth/authorize . the redirect uri check uses loose regex pattern matching without anchoring to hostname boundaries. supplying redirect_uri=https://auth.company.com.attacker.com successfully issues authorization codes to an attacker-controlled endpoint. see report details above for repro. october 17, 2026 11:00 utc #1 security-triage@company.com triaged and verified finding. assigning to @david_p (iam &amp; auth security) for urgent patch. october 17, 2026 11:30 utc #2 david_p@company.com acknowledging finding. confirmed the flawed regex in oauth_validator.py . i will implement strict hostname allowlist parsing against registered client redirect uris and push the patch tomorrow. october 18, 2026 16:45 utc #3">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/918204918/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/918204918</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/918204918/" class="bug-row-title">[Security P1] OAuth2 Redirect URI Validation Bypass in Mobile Authorization Flow (/oauth/authorize)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Identity &amp; Access Management &gt; OAuth2</span>
+                    <code class="bug-row-endpoint">/oauth/authorize</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>da</span>@david_p</span></td>
+            <td class="col-date">October 18, 2026 16:45 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="920194812" data-status="triaged" data-assignee="unassigned" data-priority="p1" data-severity="s1" data-component="security &gt; financial &amp; payments security &gt; checkout api" data-type="vulnerability (secrets / credentials)" data-hotlists="7920155 secrets-exposure pci-dss-review" data-search="920194812 b/920194812 [security p1] hardcoded payment sandbox api key active in production checkout router triaged p1 s1 vulnerability (secrets / credentials) security &gt; financial &amp; payments security &gt; checkout api secrets-scanner@company.com october 23, 2026 (target: 48h sla) october 21, 2026 09:15 utc october 21, 2026 11:30 utc 7920155 secrets-exposure pci-dss-review static source code scanner found fallback sk_live_... key embedded in checkout client configuration. /checkout/* //depot/checkout/config.py payment gateway secret token grep -rn sk_live //depot/checkout/config.py sk_live_99214... potential unauthorized chargeback and refund triggering. p1/s1 48 hour sla. secrets-scanner@company.com automated secret alert on commit #84910. october 21, 2026 09:15 utc #1 920194812 b/920194812 [security p1] hardcoded payment sandbox api key active in production checkout router triaged p1 s1 vulnerability (secrets / credentials) security &gt; financial &amp; payments security &gt; checkout api secrets-scanner@company.com october 23, 2026 (target: 48h sla) october 21, 2026 09:15 utc october 21, 2026 11:30 utc 7920155 secrets-exposure pci-dss-review static source code scanner found fallback sk_live_... key embedded in checkout client configuration. /checkout/* //depot/checkout/config.py payment gateway secret token grep -rn sk_live //depot/checkout/config.py sk_live_99214... potential unauthorized chargeback and refund triggering. p1/s1 48 hour sla. secrets-scanner@company.com automated secret alert on commit #84910. october 21, 2026 09:15 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/920194812/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/920194812</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-triaged">Triaged</span></td>
+            <td>
+                <a href="../../../tracker/issues/920194812/" class="bug-row-title">[Security P1] Hardcoded Payment Sandbox API Key Active in Production Checkout Router</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Financial &amp; Payments Security &gt; Checkout API</span>
+                    <code class="bug-row-endpoint">/checkout/*</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip unassigned'>Unassigned</span></td>
+            <td class="col-date">October 21, 2026 11:30 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="683920194" data-status="blocked" data-assignee="kevin_j" data-priority="p1" data-severity="s1" data-component="infrastructure &gt; cloud sre &amp; containers &gt; docker host" data-type="vulnerability (container / privilege escalation)" data-hotlists="7920155 container-security infra-hardening" data-search="683920194 b/683920194 [security p1] docker socket exposure in ci worker container host blocked p1 s1 vulnerability (container / privilege escalation) infrastructure &gt; cloud sre &amp; containers &gt; docker host infra-audit@company.com (infrastructure security audit) kevin_j october 25, 2026 (target: 48h sla) october 18, 2026 10:00 utc october 21, 2026 10:40 utc 7920155 container-security infra-hardening during an infrastructure container security review, security audit discovered that shared ephemeral ci/cd worker pods running on the kubernetes build cluster mount the host&#x27;s docker socket at &lt;code&gt;/var/run/docker.sock&lt;/code&gt; in order to allow test suites to build and push container images. any developer pipeline script or malicious dependency executing inside a ci job can communicate with the host docker daemon with root privileges, escape the container boundary, and compromise the underlying kubernetes worker node. ci worker daemon (build runner pool) //depot/docker/ci_worker.yaml &lt;code&gt;/var/run/docker.sock&lt;/code&gt; bind-mounted with read-write permissions host filesystem root accessible via docker api volume mounts node-level service account tokens and secrets accessible across shared worker vms # inside any unprivileged ci job container:
+docker -h unix:///var/run/docker.sock run -v /:/host_root alpine cat /host_root/etc/shadow root:$6$rounds=656000$saltsalt...:19800:0:99999:7::: critical infrastructure container escape. enables arbitrary host root execution, cross-tenant build job tampering, lateral movement across the kubernetes cluster, and extraction of node credentials. p1/s1 infrastructure security vulnerability: resolution required within 48 hours of initial triage (target due date: october 25, 2026 18:00 utc). infra-audit@company.com filing p1 finding for docker socket mount in ci runner pods.
+
+we observed &lt;code&gt;volumemounts: - mountpath: /var/run/docker.sock name: docker-socket&lt;/code&gt; in &lt;code&gt;//depot/docker/ci_worker.yaml&lt;/code&gt; across all runner pools. any pull request running automated unit tests has full root control over the host node via standard docker cli commands. october 18, 2026 10:00 utc #1 kevin_j@company.com acknowledging finding. we originally mounted the socket because several teams build microservice images during their integration test pipelines. we will evaluate migrating off docker-outside-of-docker (dood). october 18, 2026 14:15 utc #2 sarah_k@company.com can we just switch to docker-in-docker (dind) sidecars instead of re-architecting everything?
+
+over 40 services currently rely on &lt;code&gt;docker build&lt;/code&gt; in ci. if we disable the socket without a drop-in replacement, build pipelines for payments and customer api will break. october 19, 2026 09:30 utc #3 alex_m@company.com dind is not an acceptable solution—it requires &lt;code&gt;securitycontext.privileged: true&lt;/code&gt; which violates our cluster podsecuritystandards (restricted profile) and provides essentially identical host-level escape vectors.
+
+the approved enterprise standard is rootless in-container builders (google kaniko or buildah). kaniko executes purely in user space without requiring root privileges or socket mounts. october 19, 2026 11:20 utc #4 sarah_k@company.com also noticing unrelated test failures in node-18 frontend builds on runner pool 3—getting timeout errors during npm install. is that connected to the socket permissions change? october 19, 2026 15:10 utc #5 kevin_j@company.com hi sarah, the npm timeout on runner pool 3 is an unrelated memory limit issue (tracked in b/992148102). nothing has been disabled yet on the socket.
+
+regarding the remediation: i tested kaniko on a staging runner pool and successfully built container images without any socket mount. pr #4920 is prepared. october 20, 2026 10:45 utc #6 infra-audit@company.com checking in on timeline. p1 sla target is in 4 days. can we deploy pr #4920 to production runners today? october 21, 2026 08:15 utc #7 kevin_j@company.com setting bug status to **blocked**.
+
+the kaniko image builder template is completed, but production rollout is currently blocked on external infrastructure provisioning:
+
+1. **cloud storage &amp; iam dependency:** kaniko requires a dedicated cloud storage build-cache bucket (&lt;code&gt;gs://ci-kaniko-cache-prod&lt;/code&gt;) and a workload identity iam service account (&lt;code&gt;kaniko-builder@prod-ci.iam.gserviceaccount.com&lt;/code&gt;) to publish container layers without storing static registry credentials.
+2. **pending ticket:** we submitted ticket &lt;code&gt;b/782194012&lt;/code&gt; to &lt;strong&gt;storage-infra@company.com&lt;/strong&gt; and &lt;strong&gt;cloud-iam-oncall&lt;/strong&gt; to provision the bucket and workload identity bindings, but the request is pending storage quota and iam security review.
+
+until the iam service account and storage bucket are provisioned by the cloud storage team, deploying kaniko would break image caching and registry publishing across all ci pipelines. following up directly with @storage-oncall to unblock. october 21, 2026 10:40 utc #8 683920194 b/683920194 [security p1] docker socket exposure in ci worker container host blocked p1 s1 vulnerability (container / privilege escalation) infrastructure &gt; cloud sre &amp; containers &gt; docker host infra-audit@company.com (infrastructure security audit) kevin_j october 25, 2026 (target: 48h sla) october 18, 2026 10:00 utc october 21, 2026 10:40 utc 7920155 container-security infra-hardening during an infrastructure container security review, security audit discovered that shared ephemeral ci/cd worker pods running on the kubernetes build cluster mount the host&#x27;s docker socket at /var/run/docker.sock in order to allow test suites to build and push container images. any developer pipeline script or malicious dependency executing inside a ci job can communicate with the host docker daemon with root privileges, escape the container boundary, and compromise the underlying kubernetes worker node. ci worker daemon (build runner pool) //depot/docker/ci_worker.yaml /var/run/docker.sock bind-mounted with read-write permissions host filesystem root accessible via docker api volume mounts node-level service account tokens and secrets accessible across shared worker vms # inside any unprivileged ci job container: docker -h unix:///var/run/docker.sock run -v /:/host_root alpine cat /host_root/etc/shadow root:$6$rounds=656000$saltsalt...:19800:0:99999:7::: critical infrastructure container escape. enables arbitrary host root execution, cross-tenant build job tampering, lateral movement across the kubernetes cluster, and extraction of node credentials. p1/s1 infrastructure security vulnerability: resolution required within 48 hours of initial triage (target due date: october 25, 2026 18:00 utc). infra-audit@company.com filing p1 finding for docker socket mount in ci runner pods. we observed volumemounts: - mountpath: /var/run/docker.sock name: docker-socket in //depot/docker/ci_worker.yaml across all runner pools. any pull request running automated unit tests has full root control over the host node via standard docker cli commands. october 18, 2026 10:00 utc #1 kevin_j@company.com acknowledging finding. we originally mounted the socket because several teams build microservice images during their integration test pipelines. we will evaluate migrating off docker-outside-of-docker (dood). october 18, 2026 14:15 utc #2 sarah_k@company.com can we just switch to docker-in-docker (dind) sidecars instead of re-architecting everything? over 40 services currently rely on docker build in ci. if we disable the socket without a drop-in replacement, build pipelines for payments and customer api will break. october 19, 2026 09:30 utc #3 alex_m@company.com dind is not an acceptable solution—it requires securitycontext.privileged: true which violates our cluster podsecuritystandards (restricted profile) and provides essentially identical host-level escape vectors. the approved enterprise standard is rootless in-container builders (google kaniko or buildah). kaniko executes purely in user space without requiring root privileges or socket mounts. october 19, 2026 11:20 utc #4 sarah_k@company.com also noticing unrelated test failures in node-18 frontend builds on runner pool 3—getting timeout errors during npm install. is that connected to the socket permissions change? october 19, 2026 15:10 utc #5 kevin_j@company.com hi sarah, the npm timeout on runner pool 3 is an unrelated memory limit issue (tracked in b/992148102). nothing has been disabled yet on the socket. regarding the remediation: i tested kaniko on a staging runner pool and successfully built container images without any socket mount. pr #4920 is prepared. october 20, 2026 10:45 utc #6 infra-audit@company.com checking in on timeline. p1 sla target is in 4 days. can we deploy pr #4920 to production runners today? october 21, 2026 08:15 utc #7 kevin_j@company.com setting bug status to **blocked**. the kaniko image builder template is completed, but production rollout is currently blocked on external infrastructure provisioning: 1. **cloud storage &amp; iam dependency:** kaniko requires a dedicated cloud storage build-cache bucket ( gs://ci-kaniko-cache-prod ) and a workload identity iam service account ( kaniko-builder@prod-ci.iam.gserviceaccount.com ) to publish container layers without storing static registry credentials. 2. **pending ticket:** we submitted ticket b/782194012 to storage-infra@company.com and cloud-iam-oncall to provision the bucket and workload identity bindings, but the request is pending storage quota and iam security review. until the iam service account and storage bucket are provisioned by the cloud storage team, deploying kaniko would break image caching and registry publishing across all ci pipelines. following up directly with @storage-oncall to unblock. october 21, 2026 10:40 utc #8">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/683920194/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/683920194</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-blocked">Blocked</span></td>
+            <td>
+                <a href="../../../tracker/issues/683920194/" class="bug-row-title">[Security P1] Docker Socket Exposure in CI Worker Container Host</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; Cloud SRE &amp; Containers &gt; Docker Host</span>
+                    <code class="bug-row-endpoint">CI Worker Daemon (Build Runner Pool)</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ke</span>@kevin_j</span></td>
+            <td class="col-date">October 21, 2026 10:40 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="481920194" data-status="blocked" data-assignee="lucas_m" data-priority="p2" data-severity="s2" data-component="security &gt; financial &amp; payments security &gt; cardholder data vault" data-type="vulnerability (cryptography / pci-dss)" data-hotlists="7920155 pci-dss-review kms-migration payments-integrity" data-search="481920194 b/481920194 [security p2] database field-level encryption migration for cardholder billing records blocked on cloud kms quota blocked p2 s2 vulnerability (cryptography / pci-dss) security &gt; financial &amp; payments security &gt; cardholder data vault security-compliance@company.com (compliance audit team) lucas_m october 28, 2026 (target: 14d sla) october 17, 2026 09:00 utc october 21, 2026 06:15 utc 7920155 pci-dss-review kms-migration payments-integrity pci-dss 4.0 mandate requires aes-256 field-level envelope encryption for legacy cardholder billing metadata stored in database tables. the automated migration pipeline encrypts customer billing records using cloud kms key rings. billing vault encryption worker //depot/services/payments/vault/envelope_migrator.py legacy unencrypted &lt;code&gt;cardholder_billing_address&lt;/code&gt; column cloud kms api envelope key request limits (10,000 qps threshold) python3 //depot/services/payments/vault/envelope_migrator.py --dry-run=false resource_exhausted: cloud kms api quota exceeded for project payments-prod-281. inability to complete pci-dss cardholder data encryption before compliance deadline without causing production payment processing throttling. p2/s2 compliance vulnerability: resolution required within 14 days of initial triage (target due date: october 28, 2026 18:00 utc). security-compliance@company.com filing p2 finding for pci-dss 4.0 compliance.
+
+historical payment metadata in &lt;code&gt;billing_records_legacy&lt;/code&gt; requires backfill envelope encryption via cloud kms before the upcoming audit. october 17, 2026 09:00 utc #1 lucas_m@company.com acknowledging ticket. developing migration script &lt;code&gt;envelope_migrator.py&lt;/code&gt; to batch encrypt existing records with dek/kek rotation. october 18, 2026 14:30 utc #2 lucas_m@company.com staging dry run hit &lt;code&gt;resource_exhausted&lt;/code&gt; quota limits on cloud kms (10,000 qps threshold exceeded during 500k row batching). running migration in production currently threatens live checkout latency. october 19, 2026 11:00 utc #3 lucas_m@company.com setting status to **blocked**.
+
+the migration script is tested and ready, but execution is blocked on:
+1. **cloud kms quota increase:** submitted ticket &lt;code&gt;b/882190412&lt;/code&gt; to &lt;strong&gt;cloud-kms-quota@company.com&lt;/strong&gt; and &lt;strong&gt;infra-capacity@company.com&lt;/strong&gt; to raise project qps from 10k to 50k.
+2. **dba maintenance window:** awaiting confirmation from database admin on-call (@andre_f) to execute the migration off-peak.
+
+once the kms quota is increased by infrastructure capacity, we will resume the migration job. october 21, 2026 06:15 utc #4 481920194 b/481920194 [security p2] database field-level encryption migration for cardholder billing records blocked on cloud kms quota blocked p2 s2 vulnerability (cryptography / pci-dss) security &gt; financial &amp; payments security &gt; cardholder data vault security-compliance@company.com (compliance audit team) lucas_m october 28, 2026 (target: 14d sla) october 17, 2026 09:00 utc october 21, 2026 06:15 utc 7920155 pci-dss-review kms-migration payments-integrity pci-dss 4.0 mandate requires aes-256 field-level envelope encryption for legacy cardholder billing metadata stored in database tables. the automated migration pipeline encrypts customer billing records using cloud kms key rings. billing vault encryption worker //depot/services/payments/vault/envelope_migrator.py legacy unencrypted cardholder_billing_address column cloud kms api envelope key request limits (10,000 qps threshold) python3 //depot/services/payments/vault/envelope_migrator.py --dry-run=false resource_exhausted: cloud kms api quota exceeded for project payments-prod-281. inability to complete pci-dss cardholder data encryption before compliance deadline without causing production payment processing throttling. p2/s2 compliance vulnerability: resolution required within 14 days of initial triage (target due date: october 28, 2026 18:00 utc). security-compliance@company.com filing p2 finding for pci-dss 4.0 compliance. historical payment metadata in billing_records_legacy requires backfill envelope encryption via cloud kms before the upcoming audit. october 17, 2026 09:00 utc #1 lucas_m@company.com acknowledging ticket. developing migration script envelope_migrator.py to batch encrypt existing records with dek/kek rotation. october 18, 2026 14:30 utc #2 lucas_m@company.com staging dry run hit resource_exhausted quota limits on cloud kms (10,000 qps threshold exceeded during 500k row batching). running migration in production currently threatens live checkout latency. october 19, 2026 11:00 utc #3 lucas_m@company.com setting status to **blocked**. the migration script is tested and ready, but execution is blocked on: 1. **cloud kms quota increase:** submitted ticket b/882190412 to cloud-kms-quota@company.com and infra-capacity@company.com to raise project qps from 10k to 50k. 2. **dba maintenance window:** awaiting confirmation from database admin on-call (@andre_f) to execute the migration off-peak. once the kms quota is increased by infrastructure capacity, we will resume the migration job. october 21, 2026 06:15 utc #4">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/481920194/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/481920194</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-blocked">Blocked</span></td>
+            <td>
+                <a href="../../../tracker/issues/481920194/" class="bug-row-title">[Security P2] Database Field-Level Encryption Migration for Cardholder Billing Records Blocked on Cloud KMS Quota</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Financial &amp; Payments Security &gt; Cardholder Data Vault</span>
+                    <code class="bug-row-endpoint">Billing Vault Encryption Worker</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>lu</span>@lucas_m</span></td>
+            <td class="col-date">October 21, 2026 06:15 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="381920194" data-status="blocked" data-assignee="sam_b" data-priority="p3" data-severity="s3" data-component="infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp" data-type="bug (web security / csp)" data-hotlists="7920155 csp-hygiene edge-ingress" data-search="381920194 b/381920194 [security p3] content-security-policy (csp) nonce-based enforcement on internal admin console (/admin/*) blocked p3 s3 bug (web security / csp) infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp appsec-hygiene@company.com (application security hygiene) sam_b october 31, 2026 (target: 30d sla) october 15, 2026 10:00 utc october 21, 2026 08:30 utc 7920155 csp-hygiene edge-ingress the internal admin console at &lt;code&gt;https://admin.enterprise.internal&lt;/code&gt; currently serves &lt;code&gt;content-security-policy-report-only&lt;/code&gt;. company web security guidelines mandate enforcing active &lt;code&gt;content-security-policy: default-src &#x27;self&#x27;; script-src &#x27;nonce-{random}&#x27;;&lt;/code&gt; to mitigate cross-site scripting (xss) risks. admin console (/admin/*) //depot/gateway/csp/admin_csp.conf content-security-policy-report-only header legacy inline &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; blocks generated by charting widgets curl -i &quot;https://admin.enterprise.internal/admin/dashboard&quot; content-security-policy-report-only: default-src &#x27;self&#x27;... lack of active csp enforcement increases risk of dom-based xss exploitation on internal administrative dashboards. p3/s3 security hygiene: resolution required within 30 days (target due date: october 31, 2026 18:00 utc). appsec-hygiene@company.com filing p3 security hygiene ticket to switch admin console csp from report-only mode to full enforcement with cryptographic nonces. october 15, 2026 10:00 utc #1 sam_b@company.com configured active csp header in staging gateway proxy. october 17, 2026 15:00 utc #2 sam_b@company.com testing in staging revealed that the legacy admin analytics widget (&lt;code&gt;legacy-dashboard-charts.js&lt;/code&gt;) dynamically generates inline script tags without nonce support, breaking dashboard visualizations for operations teams. october 19, 2026 11:30 utc #3 sam_b@company.com setting status to **blocked**.
+
+gateway csp configuration is ready, but enforcement is blocked on frontend migration:
+1. **frontend charting dependency:** the legacy charting component must be migrated to modern chart.js v4.x (which supports nonce tags).
+2. **pending frontend task:** tracking in ticket &lt;code&gt;b/671029481&lt;/code&gt; assigned to &lt;strong&gt;@carla_s&lt;/strong&gt; and &lt;strong&gt;#frontend-core&lt;/strong&gt;.
+
+once pr from `b/671029481` lands, we will flip the header to active enforcement. october 21, 2026 08:30 utc #4 381920194 b/381920194 [security p3] content-security-policy (csp) nonce-based enforcement on internal admin console (/admin/*) blocked p3 s3 bug (web security / csp) infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp appsec-hygiene@company.com (application security hygiene) sam_b october 31, 2026 (target: 30d sla) october 15, 2026 10:00 utc october 21, 2026 08:30 utc 7920155 csp-hygiene edge-ingress the internal admin console at https://admin.enterprise.internal currently serves content-security-policy-report-only . company web security guidelines mandate enforcing active content-security-policy: default-src &#x27;self&#x27;; script-src &#x27;nonce-{random}&#x27;; to mitigate cross-site scripting (xss) risks. admin console (/admin/*) //depot/gateway/csp/admin_csp.conf content-security-policy-report-only header legacy inline &amp;lt;script&amp;gt; blocks generated by charting widgets curl -i &quot;https://admin.enterprise.internal/admin/dashboard&quot; content-security-policy-report-only: default-src &#x27;self&#x27;... lack of active csp enforcement increases risk of dom-based xss exploitation on internal administrative dashboards. p3/s3 security hygiene: resolution required within 30 days (target due date: october 31, 2026 18:00 utc). appsec-hygiene@company.com filing p3 security hygiene ticket to switch admin console csp from report-only mode to full enforcement with cryptographic nonces. october 15, 2026 10:00 utc #1 sam_b@company.com configured active csp header in staging gateway proxy. october 17, 2026 15:00 utc #2 sam_b@company.com testing in staging revealed that the legacy admin analytics widget ( legacy-dashboard-charts.js ) dynamically generates inline script tags without nonce support, breaking dashboard visualizations for operations teams. october 19, 2026 11:30 utc #3 sam_b@company.com setting status to **blocked**. gateway csp configuration is ready, but enforcement is blocked on frontend migration: 1. **frontend charting dependency:** the legacy charting component must be migrated to modern chart.js v4.x (which supports nonce tags). 2. **pending frontend task:** tracking in ticket b/671029481 assigned to @carla_s and #frontend-core . once pr from `b/671029481` lands, we will flip the header to active enforcement. october 21, 2026 08:30 utc #4">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/381920194/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/381920194</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p3">P3</span></td>
+            <td><span class="level-badge severity-s3">S3</span></td>
+            <td><span class="status-chip status-blocked">Blocked</span></td>
+            <td>
+                <a href="../../../tracker/issues/381920194/" class="bug-row-title">[Security P3] Content-Security-Policy (CSP) Nonce-Based Enforcement on Internal Admin Console (/admin/*)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; API Gateway &amp; Edge &gt; Edge Headers &amp; CSP</span>
+                    <code class="bug-row-endpoint">Admin Console (/admin/*)</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>sa</span>@sam_b</span></td>
+            <td class="col-date">October 21, 2026 08:30 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="849201842" data-status="verified" data-assignee="david_p" data-priority="p0" data-severity="s0" data-component="security &gt; identity &amp; access management &gt; sso" data-type="vulnerability (auth / session hijacking)" data-hotlists="7920155 p0-critical-security auth-security sso-federation" data-search="849201842 b/849201842 [security p0] central sso session fixation via insecure cookie attribute on login (/sso/login) verified p0 s0 vulnerability (auth / session hijacking) security &gt; identity &amp; access management &gt; sso pentest-team@company.com (internal red team / pentest) david_p october 09, 2026 (completed) october 09, 2026 14:00 utc october 09, 2026 22:15 utc 7920155 p0-critical-security auth-security sso-federation during an authorized red team penetration test of the identity &amp; central sso platform, auditors identified a critical session fixation vulnerability in the primary authentication controller at &lt;code&gt;/sso/login&lt;/code&gt;. the session identifier cookie (&lt;code&gt;sso_session_id&lt;/code&gt;) was not regenerated upon successful credential verification, allowing an attacker to pre-set a session cookie on a victim&#x27;s client and hijack the authenticated session immediately after login. /sso/login //depot/identity/session_manager.py &lt;code&gt;sso_session_id&lt;/code&gt; session token reuse across auth boundary missing &lt;code&gt;session.regenerate_id()&lt;/code&gt; invocation in login controller victim corporate credentials and iam access permissions bound to pre-allocated session token # step 1: pre-set attacker session cookie:
+curl -c cookies.txt &quot;https://auth.enterprise.internal/sso/login&quot;
+
+# step 2: victim logs in with valid credentials using the pre-set session cookie:
+curl -b cookies.txt -x post &quot;https://auth.enterprise.internal/sso/login&quot; \
+  -d &quot;username=victim_user&amp;password=secretpassword123&quot;
+
+# step 3: attacker accesses protected dashboard using original cookies.txt without logging in:
+curl -b cookies.txt &quot;https://auth.enterprise.internal/api/v1/auth/session/status&quot; {
+  &quot;authenticated&quot;: true,
+  &quot;user_ldap&quot;: &quot;victim_user&quot;,
+  &quot;roles&quot;: [&quot;corp-engineer&quot;, &quot;prod-deployer&quot;],
+  &quot;session_id&quot;: &quot;sso_pre_fixed_cookie_99812a&quot;
+} critical corporate authentication bypass. allowed arbitrary account takeover of corporate users on shared kiosks, lab workstations, or through subdomain cookie tossing attacks, compromising internal corporate network access. p0/s0 emergency incident: resolved and verified within 8 hours. pentest-team@company.com declaring p0 finding for session fixation in central sso.
+
+we confirmed that &lt;code&gt;/sso/login&lt;/code&gt; does not issue a new &lt;code&gt;sso_session_id&lt;/code&gt; cookie after successful authentication. if an attacker pre-seeds a session cookie on a client browser, that exact cookie becomes fully authenticated once the user logs in.
+
+full reproduction script and curl payload attached above. october 09, 2026 14:00 utc #1 sec-ops@company.com incident commander joined. declaring p0 emergency security outage (incident #sec-9841).
+
+assigning to &lt;strong&gt;@david_p&lt;/strong&gt; (iam primary on-call) and ccing &lt;strong&gt;@sarah_k&lt;/strong&gt; (iam tech lead). setting up emergency war room on #sec-incident-sso-fixation. october 09, 2026 14:15 utc #2 david_p@company.com root cause analysis complete:
+
+in &lt;code&gt;//depot/identity/session_manager.py&lt;/code&gt;, the &lt;code&gt;authenticate_user()&lt;/code&gt; handler was updating user state directly in the existing session record without calling &lt;code&gt;session_store.regenerate_id()&lt;/code&gt;.
+
+emergency hotfix pr #4701 created:
+1. invokes cryptographic session renewal (&lt;code&gt;session_store.invalidate_and_regenerate()&lt;/code&gt;) upon every login.
+2. sends &lt;code&gt;set-cookie: sso_session_id=...; httponly; secure; samesite=strict&lt;/code&gt; with new token.
+3. adds unit test suite &lt;code&gt;//depot/identity:session_manager_test&lt;/code&gt;. october 09, 2026 16:30 utc #3 sarah_k@company.com pr #4701 reviewed and approved. merged to release branch.
+
+canary deployment initiated on edge authentication gateways in us-east1 and eu-west1. october 09, 2026 17:45 utc #4 david_p@company.com global rollout of hotfix pr #4701 completed to 100% of production sso traffic.
+
+canary metrics healthy: zero 5xx error spikes and session creation latencies normal.
+setting status to **fixed** and handing off to pentest team for independent re-verification. october 09, 2026 19:30 utc #5 pentest-team@company.com independent retest verification passed:
+
+1. executed automated penetration test suite against production &lt;code&gt;https://auth.enterprise.internal/sso/login&lt;/code&gt;.
+2. verified that pre-existing session cookies are immediately invalidated upon login.
+3. confirmed new high-entropy &lt;code&gt;sso_session_id&lt;/code&gt; token issued with &lt;code&gt;samesite=strict; httponly; secure&lt;/code&gt;.
+
+the session fixation vulnerability is completely mitigated. october 09, 2026 21:00 utc #6 sec-ops@company.com incident #sec-9841 resolution &amp; post-mortem sign-off:
+
+- hotfix pr #4701 verified in production by red team.
+- automated regression tests merged into ci pipeline.
+- post-mortem review scheduled for friday with iam and security engineering.
+
+changing status to **verified** and closing incident ticket. october 09, 2026 22:15 utc #7 849201842 b/849201842 [security p0] central sso session fixation via insecure cookie attribute on login (/sso/login) verified p0 s0 vulnerability (auth / session hijacking) security &gt; identity &amp; access management &gt; sso pentest-team@company.com (internal red team / pentest) david_p october 09, 2026 (completed) october 09, 2026 14:00 utc october 09, 2026 22:15 utc 7920155 p0-critical-security auth-security sso-federation during an authorized red team penetration test of the identity &amp; central sso platform, auditors identified a critical session fixation vulnerability in the primary authentication controller at /sso/login . the session identifier cookie ( sso_session_id ) was not regenerated upon successful credential verification, allowing an attacker to pre-set a session cookie on a victim&#x27;s client and hijack the authenticated session immediately after login. /sso/login //depot/identity/session_manager.py sso_session_id session token reuse across auth boundary missing session.regenerate_id() invocation in login controller victim corporate credentials and iam access permissions bound to pre-allocated session token # step 1: pre-set attacker session cookie: curl -c cookies.txt &quot;https://auth.enterprise.internal/sso/login&quot; # step 2: victim logs in with valid credentials using the pre-set session cookie: curl -b cookies.txt -x post &quot;https://auth.enterprise.internal/sso/login&quot; \ -d &quot;username=victim_user&amp;password=secretpassword123&quot; # step 3: attacker accesses protected dashboard using original cookies.txt without logging in: curl -b cookies.txt &quot;https://auth.enterprise.internal/api/v1/auth/session/status&quot; { &quot;authenticated&quot;: true, &quot;user_ldap&quot;: &quot;victim_user&quot;, &quot;roles&quot;: [&quot;corp-engineer&quot;, &quot;prod-deployer&quot;], &quot;session_id&quot;: &quot;sso_pre_fixed_cookie_99812a&quot; } critical corporate authentication bypass. allowed arbitrary account takeover of corporate users on shared kiosks, lab workstations, or through subdomain cookie tossing attacks, compromising internal corporate network access. p0/s0 emergency incident: resolved and verified within 8 hours. pentest-team@company.com declaring p0 finding for session fixation in central sso. we confirmed that /sso/login does not issue a new sso_session_id cookie after successful authentication. if an attacker pre-seeds a session cookie on a client browser, that exact cookie becomes fully authenticated once the user logs in. full reproduction script and curl payload attached above. october 09, 2026 14:00 utc #1 sec-ops@company.com incident commander joined. declaring p0 emergency security outage (incident #sec-9841). assigning to @david_p (iam primary on-call) and ccing @sarah_k (iam tech lead). setting up emergency war room on #sec-incident-sso-fixation. october 09, 2026 14:15 utc #2 david_p@company.com root cause analysis complete: in //depot/identity/session_manager.py , the authenticate_user() handler was updating user state directly in the existing session record without calling session_store.regenerate_id() . emergency hotfix pr #4701 created: 1. invokes cryptographic session renewal ( session_store.invalidate_and_regenerate() ) upon every login. 2. sends set-cookie: sso_session_id=...; httponly; secure; samesite=strict with new token. 3. adds unit test suite //depot/identity:session_manager_test . october 09, 2026 16:30 utc #3 sarah_k@company.com pr #4701 reviewed and approved. merged to release branch. canary deployment initiated on edge authentication gateways in us-east1 and eu-west1. october 09, 2026 17:45 utc #4 david_p@company.com global rollout of hotfix pr #4701 completed to 100% of production sso traffic. canary metrics healthy: zero 5xx error spikes and session creation latencies normal. setting status to **fixed** and handing off to pentest team for independent re-verification. october 09, 2026 19:30 utc #5 pentest-team@company.com independent retest verification passed: 1. executed automated penetration test suite against production https://auth.enterprise.internal/sso/login . 2. verified that pre-existing session cookies are immediately invalidated upon login. 3. confirmed new high-entropy sso_session_id token issued with samesite=strict; httponly; secure . the session fixation vulnerability is completely mitigated. october 09, 2026 21:00 utc #6 sec-ops@company.com incident #sec-9841 resolution &amp; post-mortem sign-off: - hotfix pr #4701 verified in production by red team. - automated regression tests merged into ci pipeline. - post-mortem review scheduled for friday with iam and security engineering. changing status to **verified** and closing incident ticket. october 09, 2026 22:15 utc #7">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/849201842/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/849201842</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p0">P0</span></td>
+            <td><span class="level-badge severity-s0">S0</span></td>
+            <td><span class="status-chip status-verified">Verified</span></td>
+            <td>
+                <a href="../../../tracker/issues/849201842/" class="bug-row-title">[Security P0] Central SSO Session Fixation via Insecure Cookie Attribute on Login (/sso/login)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Identity &amp; Access Management &gt; SSO</span>
+                    <code class="bug-row-endpoint">/sso/login</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>da</span>@david_p</span></td>
+            <td class="col-date">October 09, 2026 22:15 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="194820194" data-status="assigned" data-assignee="lucas_m" data-priority="p2" data-severity="s2" data-component="services &gt; billing &gt; invoicing &amp; currency service" data-type="vulnerability (financial / math logic)" data-hotlists="7920155 payments-integrity" data-search="194820194 b/194820194 [security p2] negative balance ingestion flaw in currency conversion service assigned p2 s2 vulnerability (financial / math logic) services &gt; billing &gt; invoicing &amp; currency service billing-ops@company.com lucas_m october 27, 2026 (target: 7d sla) october 20, 2026 14:00 utc october 21, 2026 06:00 utc 7920155 payments-integrity negative balance numbers in /api/v1/payments/convert cause credit additions instead of deductions. /api/v1/payments/convert //depot/services/payments/fx_calculator.py amount parsing logic curl -x post &quot;https://payments.internal/api/v1/payments/convert&quot; -d &#x27;{&quot;amount&quot;: -50.0}&#x27; {&quot;credited&quot;: 50.0} financial loss through intentional balance manipulation. p2/s2 7 days. billing-ops@company.com discovered during currency conversion boundary tests. october 20, 2026 14:00 utc #1 194820194 b/194820194 [security p2] negative balance ingestion flaw in currency conversion service assigned p2 s2 vulnerability (financial / math logic) services &gt; billing &gt; invoicing &amp; currency service billing-ops@company.com lucas_m october 27, 2026 (target: 7d sla) october 20, 2026 14:00 utc october 21, 2026 06:00 utc 7920155 payments-integrity negative balance numbers in /api/v1/payments/convert cause credit additions instead of deductions. /api/v1/payments/convert //depot/services/payments/fx_calculator.py amount parsing logic curl -x post &quot;https://payments.internal/api/v1/payments/convert&quot; -d &#x27;{&quot;amount&quot;: -50.0}&#x27; {&quot;credited&quot;: 50.0} financial loss through intentional balance manipulation. p2/s2 7 days. billing-ops@company.com discovered during currency conversion boundary tests. october 20, 2026 14:00 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/194820194/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/194820194</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/194820194/" class="bug-row-title">[Security P2] Negative Balance Ingestion Flaw in Currency Conversion Service</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Services &gt; Billing &gt; Invoicing &amp; Currency Service</span>
+                    <code class="bug-row-endpoint">/api/v1/payments/convert</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>lu</span>@lucas_m</span></td>
+            <td class="col-date">October 21, 2026 06:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="392019482" data-status="triaged" data-assignee="unassigned" data-priority="p2" data-severity="s2" data-component="security &gt; identity &amp; access management &gt; password reset" data-type="vulnerability (abuse / rate limiting)" data-hotlists="7920155 sms-abuse-prevention" data-search="392019482 b/392019482 [security p2] missing rate limiting on password reset sms dispatch endpoint triaged p2 s2 vulnerability (abuse / rate limiting) security &gt; identity &amp; access management &gt; password reset fraud-prevention@company.com october 28, 2026 (target: 7d sla) october 20, 2026 16:30 utc october 21, 2026 07:15 utc 7920155 sms-abuse-prevention endpoint /api/v1/auth/reset-sms allows unlimited requests per ip, enabling sms toll fraud and client harassment. /api/v1/auth/reset-sms //depot/identity/sms_service.py sms dispatch gateway for i in {1..50}; do curl -x post &quot;https://auth.internal/api/v1/auth/reset-sms&quot;; done {&quot;status&quot;: &quot;sent&quot;} financial loss from telephony toll charges and user annoyance. p2/s2 7 day resolution. fraud-prevention@company.com excessive sms dispatches observed from cloud ip ranges. october 20, 2026 16:30 utc #1 392019482 b/392019482 [security p2] missing rate limiting on password reset sms dispatch endpoint triaged p2 s2 vulnerability (abuse / rate limiting) security &gt; identity &amp; access management &gt; password reset fraud-prevention@company.com october 28, 2026 (target: 7d sla) october 20, 2026 16:30 utc october 21, 2026 07:15 utc 7920155 sms-abuse-prevention endpoint /api/v1/auth/reset-sms allows unlimited requests per ip, enabling sms toll fraud and client harassment. /api/v1/auth/reset-sms //depot/identity/sms_service.py sms dispatch gateway for i in {1..50}; do curl -x post &quot;https://auth.internal/api/v1/auth/reset-sms&quot;; done {&quot;status&quot;: &quot;sent&quot;} financial loss from telephony toll charges and user annoyance. p2/s2 7 day resolution. fraud-prevention@company.com excessive sms dispatches observed from cloud ip ranges. october 20, 2026 16:30 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/392019482/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/392019482</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-triaged">Triaged</span></td>
+            <td>
+                <a href="../../../tracker/issues/392019482/" class="bug-row-title">[Security P2] Missing Rate Limiting on Password Reset SMS Dispatch Endpoint</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Identity &amp; Access Management &gt; Password Reset</span>
+                    <code class="bug-row-endpoint">/api/v1/auth/reset-sms</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip unassigned'>Unassigned</span></td>
+            <td class="col-date">October 21, 2026 07:15 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="592019384" data-status="assigned" data-assignee="omar_h" data-priority="p2" data-severity="s2" data-component="security &gt; data privacy governance &gt; audit logging" data-type="vulnerability (logging / credential leak)" data-hotlists="7920155 gdpr-compliance audit-log" data-search="592019384 b/592019384 [privacy p2] cleartext internal api key logged in privacy compliance audit pipeline assigned p2 s2 vulnerability (logging / credential leak) security &gt; data privacy governance &gt; audit logging audit-security@company.com omar_h october 27, 2026 (target: 7d sla) october 20, 2026 18:20 utc october 21, 2026 07:00 utc 7920155 gdpr-compliance audit-log debug level logging in compliance worker outputs the full authorization bearer token to stdout log collectors. audit log collector //depot/logging/sanitizer/audit_logger.py authorization header in syslog grep -i &#x27;bearer&#x27; /var/log/audit.log bearer sec_token_48192... credential exposure to log aggregation readers. p2/s2 7 day resolution. omar_h@company.com applying log sanitizer regex to redact bearer tokens. october 21, 2026 07:00 utc #1 592019384 b/592019384 [privacy p2] cleartext internal api key logged in privacy compliance audit pipeline assigned p2 s2 vulnerability (logging / credential leak) security &gt; data privacy governance &gt; audit logging audit-security@company.com omar_h october 27, 2026 (target: 7d sla) october 20, 2026 18:20 utc october 21, 2026 07:00 utc 7920155 gdpr-compliance audit-log debug level logging in compliance worker outputs the full authorization bearer token to stdout log collectors. audit log collector //depot/logging/sanitizer/audit_logger.py authorization header in syslog grep -i &#x27;bearer&#x27; /var/log/audit.log bearer sec_token_48192... credential exposure to log aggregation readers. p2/s2 7 day resolution. omar_h@company.com applying log sanitizer regex to redact bearer tokens. october 21, 2026 07:00 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/592019384/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/592019384</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/592019384/" class="bug-row-title">[Privacy P2] Cleartext Internal API Key Logged in Privacy Compliance Audit Pipeline</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Data Privacy Governance &gt; Audit Logging</span>
+                    <code class="bug-row-endpoint">Audit Log Collector</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>om</span>@omar_h</span></td>
+            <td class="col-date">October 21, 2026 07:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="739102847" data-status="assigned" data-assignee="kevin_j" data-priority="p2" data-severity="s2" data-component="infrastructure &gt; cloud sre &amp; containers &gt; base image" data-type="vulnerability (container / filesystem)" data-hotlists="7920155 container-hardening" data-search="739102847 b/739102847 [security p2] writable /tmp directory inside read-only root sre production containers assigned p2 s2 vulnerability (container / filesystem) infrastructure &gt; cloud sre &amp; containers &gt; base image sec-hardening@company.com kevin_j october 31, 2026 (target: 14d sla) october 17, 2026 09:30 utc october 19, 2026 14:00 utc 7920155 container-hardening /tmp is mounted without noexec flag, permitting binary execution from writable scratch space. base alpine image //depot/docker/base/dockerfile container mount options mount | grep /tmp tmpfs on /tmp type tmpfs (rw,relatime) allows attackers with arbitrary write to execute dropped binaries. p2/s2 14 days. kevin_j@company.com adding noexec,nosuid mount options to base docker-compose files. october 19, 2026 14:00 utc #1 739102847 b/739102847 [security p2] writable /tmp directory inside read-only root sre production containers assigned p2 s2 vulnerability (container / filesystem) infrastructure &gt; cloud sre &amp; containers &gt; base image sec-hardening@company.com kevin_j october 31, 2026 (target: 14d sla) october 17, 2026 09:30 utc october 19, 2026 14:00 utc 7920155 container-hardening /tmp is mounted without noexec flag, permitting binary execution from writable scratch space. base alpine image //depot/docker/base/dockerfile container mount options mount | grep /tmp tmpfs on /tmp type tmpfs (rw,relatime) allows attackers with arbitrary write to execute dropped binaries. p2/s2 14 days. kevin_j@company.com adding noexec,nosuid mount options to base docker-compose files. october 19, 2026 14:00 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/739102847/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/739102847</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/739102847/" class="bug-row-title">[Security P2] Writable /tmp Directory Inside Read-Only Root SRE Production Containers</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; Cloud SRE &amp; Containers &gt; Base Image</span>
+                    <code class="bug-row-endpoint">Base Alpine Image</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ke</span>@kevin_j</span></td>
+            <td class="col-date">October 19, 2026 14:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="294810293" data-status="fixed" data-assignee="omar_h" data-priority="p2" data-severity="s2" data-component="security &gt; data privacy governance &gt; gdpr export &amp; erasure" data-type="bug (privacy / compliance)" data-hotlists="7920155 gdpr-compliance" data-search="294810293 b/294810293 [privacy p2] gdpr data subject erasure job skipping orphaned customer preferences records fixed p2 s2 bug (privacy / compliance) security &gt; data privacy governance &gt; gdpr export &amp; erasure privacy-audit@company.com omar_h october 17, 2026 (completed) october 12, 2026 09:00 utc october 17, 2026 16:20 utc 7920155 gdpr-compliance right-to-be-forgotten pipeline purged main client tables but left user records in client_preferences_v2. /api/v1/privacy/delete //depot/gdpr/deletion_runner.py orphaned email preferences curl -x post &quot;https://privacy.internal/api/v1/privacy/delete?user_id=123&quot; {&quot;status&quot;: &quot;purged&quot;} regulatory fine risk under gdpr article 17. resolved. omar_h@company.com fix verified in pr #4810. preferences table cascaded. october 17, 2026 16:20 utc #1 294810293 b/294810293 [privacy p2] gdpr data subject erasure job skipping orphaned customer preferences records fixed p2 s2 bug (privacy / compliance) security &gt; data privacy governance &gt; gdpr export &amp; erasure privacy-audit@company.com omar_h october 17, 2026 (completed) october 12, 2026 09:00 utc october 17, 2026 16:20 utc 7920155 gdpr-compliance right-to-be-forgotten pipeline purged main client tables but left user records in client_preferences_v2. /api/v1/privacy/delete //depot/gdpr/deletion_runner.py orphaned email preferences curl -x post &quot;https://privacy.internal/api/v1/privacy/delete?user_id=123&quot; {&quot;status&quot;: &quot;purged&quot;} regulatory fine risk under gdpr article 17. resolved. omar_h@company.com fix verified in pr #4810. preferences table cascaded. october 17, 2026 16:20 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/294810293/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/294810293</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-fixed">Fixed</span></td>
+            <td>
+                <a href="../../../tracker/issues/294810293/" class="bug-row-title">[Privacy P2] GDPR Data Subject Erasure Job Skipping Orphaned Customer Preferences Records</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Data Privacy Governance &gt; GDPR Export &amp; Erasure</span>
+                    <code class="bug-row-endpoint">/api/v1/privacy/delete</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>om</span>@omar_h</span></td>
+            <td class="col-date">October 17, 2026 16:20 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="839102948" data-status="verified" data-assignee="carla_s" data-priority="p3" data-severity="s3" data-component="security &gt; privacy &amp; data protection &gt; customer data api" data-type="bug (web security / cors)" data-hotlists="7920155 cors-hygiene" data-search="839102948 b/839102948 [security p3] overly permissive cors header (*) on /api/v2/clients/summary endpoint verified p3 s3 bug (web security / cors) security &gt; privacy &amp; data protection &gt; customer data api bounty-hunter@external.internal carla_s october 15, 2026 (completed) october 09, 2026 11:30 utc october 15, 2026 17:00 utc 7920155 cors-hygiene access-control-allow-origin: * returned on client summary route when unauthenticated. /api/v2/clients/summary //depot/services/customer_api/controller.py cors headers curl -i -h &quot;origin: https://attacker.com&quot; https://api.enterprise.internal/api/v2/clients/summary access-control-allow-origin: * minor metadata reflection. resolved. carla_s@company.com restricted origin allowlist to *.enterprise.internal. october 15, 2026 17:00 utc #1 839102948 b/839102948 [security p3] overly permissive cors header (*) on /api/v2/clients/summary endpoint verified p3 s3 bug (web security / cors) security &gt; privacy &amp; data protection &gt; customer data api bounty-hunter@external.internal carla_s october 15, 2026 (completed) october 09, 2026 11:30 utc october 15, 2026 17:00 utc 7920155 cors-hygiene access-control-allow-origin: * returned on client summary route when unauthenticated. /api/v2/clients/summary //depot/services/customer_api/controller.py cors headers curl -i -h &quot;origin: https://attacker.com&quot; https://api.enterprise.internal/api/v2/clients/summary access-control-allow-origin: * minor metadata reflection. resolved. carla_s@company.com restricted origin allowlist to *.enterprise.internal. october 15, 2026 17:00 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/839102948/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/839102948</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p3">P3</span></td>
+            <td><span class="level-badge severity-s3">S3</span></td>
+            <td><span class="status-chip status-verified">Verified</span></td>
+            <td>
+                <a href="../../../tracker/issues/839102948/" class="bug-row-title">[Security P3] Overly Permissive CORS Header (*) on /api/v2/clients/summary Endpoint</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Privacy &amp; Data Protection &gt; Customer Data API</span>
+                    <code class="bug-row-endpoint">/api/v2/clients/summary</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ca</span>@carla_s</span></td>
+            <td class="col-date">October 15, 2026 17:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="482019481" data-status="fixed" data-assignee="sam_b" data-priority="p3" data-severity="s3" data-component="infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp" data-type="bug (headers / transport security)" data-hotlists="7920155 tls-standards" data-search="482019481 b/482019481 [security p3] missing strict-transport-security (hsts) header on static edge cdn assets fixed p3 s3 bug (headers / transport security) infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp ssl-labs-bot@company.com sam_b october 12, 2026 (completed) october 08, 2026 10:00 utc october 12, 2026 12:00 utc 7920155 tls-standards hsts response header missing max-age on asset cdn nodes. edge cdn proxy //depot/gateway/headers.conf strict-transport-security curl -i &quot;https://static.enterprise.internal/style.css&quot; http/2 200 ok ssl downgrade risk on insecure local wi-fi networks. resolved. sam_b@company.com added strict-transport-security: max-age=63072000; includesubdomains. october 12, 2026 12:00 utc #1 482019481 b/482019481 [security p3] missing strict-transport-security (hsts) header on static edge cdn assets fixed p3 s3 bug (headers / transport security) infrastructure &gt; api gateway &amp; edge &gt; edge headers &amp; csp ssl-labs-bot@company.com sam_b october 12, 2026 (completed) october 08, 2026 10:00 utc october 12, 2026 12:00 utc 7920155 tls-standards hsts response header missing max-age on asset cdn nodes. edge cdn proxy //depot/gateway/headers.conf strict-transport-security curl -i &quot;https://static.enterprise.internal/style.css&quot; http/2 200 ok ssl downgrade risk on insecure local wi-fi networks. resolved. sam_b@company.com added strict-transport-security: max-age=63072000; includesubdomains. october 12, 2026 12:00 utc #1">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/482019481/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/482019481</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p3">P3</span></td>
+            <td><span class="level-badge severity-s3">S3</span></td>
+            <td><span class="status-chip status-fixed">Fixed</span></td>
+            <td>
+                <a href="../../../tracker/issues/482019481/" class="bug-row-title">[Security P3] Missing Strict-Transport-Security (HSTS) Header on Static Edge CDN Assets</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; API Gateway &amp; Edge &gt; Edge Headers &amp; CSP</span>
+                    <code class="bug-row-endpoint">Edge CDN Proxy</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>sa</span>@sam_b</span></td>
+            <td class="col-date">October 12, 2026 12:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="519204819" data-status="assigned" data-assignee="lucas_m" data-priority="p2" data-severity="s2" data-component="services &gt; customer accounts &gt; client profile service" data-type="bug (performance / database)" data-hotlists="7920155 performance-sre customer-accounts" data-search="519204819 b/519204819 [bug] unindexed full-table scan on client profile search query by tax identifier (/api/v2/clients/search) assigned p2 s2 bug (performance / database) services &gt; customer accounts &gt; client profile service monitoring-bot@company.com lucas_m october 25, 2026 (target: 7d sla) october 16, 2026 09:00 utc october 20, 2026 11:20 utc 7920155 performance-sre customer-accounts slow query alert triggered during high-throughput client onboarding. missing composite index on (tax_identifier, account_status) in spanner table clientprofiles causes full table scans with p99 latency exceeding 2.5 seconds. /api/v2/clients/search //depot/services/clients/profile_service.py database query execution plan curl -x get &quot;https://api.enterprise.internal/api/v2/clients/search?tax_id=99887766&quot; {&quot;results&quot;: [{&quot;client_id&quot;: &quot;c-9988&quot;, &quot;name&quot;: &quot;acme corp&quot;}], &quot;query_time_ms&quot;: 2680} database connection pool exhaustion during peak onboarding traffic windows. p2/s2 performance defect: resolution required within 7 days (target due date: october 25, 2026 18:00 utc). monitoring-bot@company.com automated alert: p99 latency on /api/v2/clients/search exceeded 2000ms threshold (measured: 2680ms). october 16, 2026 09:00 utc #1 lucas_m@company.com drafted ddl schema migration pr #4810 to add index `idx_client_profiles_tax_id_status`. scheduled for next rollout window. october 20, 2026 11:20 utc #2 519204819 b/519204819 [bug] unindexed full-table scan on client profile search query by tax identifier (/api/v2/clients/search) assigned p2 s2 bug (performance / database) services &gt; customer accounts &gt; client profile service monitoring-bot@company.com lucas_m october 25, 2026 (target: 7d sla) october 16, 2026 09:00 utc october 20, 2026 11:20 utc 7920155 performance-sre customer-accounts slow query alert triggered during high-throughput client onboarding. missing composite index on (tax_identifier, account_status) in spanner table clientprofiles causes full table scans with p99 latency exceeding 2.5 seconds. /api/v2/clients/search //depot/services/clients/profile_service.py database query execution plan curl -x get &quot;https://api.enterprise.internal/api/v2/clients/search?tax_id=99887766&quot; {&quot;results&quot;: [{&quot;client_id&quot;: &quot;c-9988&quot;, &quot;name&quot;: &quot;acme corp&quot;}], &quot;query_time_ms&quot;: 2680} database connection pool exhaustion during peak onboarding traffic windows. p2/s2 performance defect: resolution required within 7 days (target due date: october 25, 2026 18:00 utc). monitoring-bot@company.com automated alert: p99 latency on /api/v2/clients/search exceeded 2000ms threshold (measured: 2680ms). october 16, 2026 09:00 utc #1 lucas_m@company.com drafted ddl schema migration pr #4810 to add index `idx_client_profiles_tax_id_status`. scheduled for next rollout window. october 20, 2026 11:20 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/519204819/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/519204819</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/519204819/" class="bug-row-title">[Bug] Unindexed Full-Table Scan on Client Profile Search Query by Tax Identifier (/api/v2/clients/search)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Services &gt; Customer Accounts &gt; Client Profile Service</span>
+                    <code class="bug-row-endpoint">/api/v2/clients/search</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>lu</span>@lucas_m</span></td>
+            <td class="col-date">October 20, 2026 11:20 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="629104820" data-status="assigned" data-assignee="elena_r" data-priority="p3" data-severity="s3" data-component="services &gt; customer accounts &gt; crm integrations" data-type="bug (integration / logic)" data-hotlists="7920155 crm-integrations" data-search="629104820 b/629104820 [security p3] outbound salesforce crm sync webhook retrying indefinitely on 4xx client errors assigned p3 s3 bug (integration / logic) services &gt; customer accounts &gt; crm integrations crm-ops@company.com elena_r october 31, 2026 (target: 30d sla) october 14, 2026 10:30 utc october 19, 2026 14:00 utc 7920155 crm-integrations the asynchronous crm synchronization worker retries failed 400/404 salesforce webhook tasks indefinitely without max retry caps, causing celery background queue congestion and memory accumulation on persistent 4xx client errors. /internal/v1/crm/salesforce/webhook //depot/services/clients/integrations/salesforce_sync.py retry queue metadata curl -x post &quot;https://crm.internal/internal/v1/crm/salesforce/webhook&quot; -d &#x27;{&quot;event&quot;: &quot;client_updated&quot;, &quot;client_id&quot;: &quot;invalid_id&quot;}&#x27; {&quot;status&quot;: &quot;queued&quot;, &quot;retry_count&quot;: 8421} resource starvation for legitimate customer data sync tasks across worker pods. p3/s3 integration hygiene: resolution required within 30 days (target due date: october 31, 2026 18:00 utc). crm-ops@company.com noticing memory growth in redis worker broker. a single deleted salesforce record generated over 8,000 retries. october 14, 2026 10:30 utc #1 elena_r@company.com added dead-letter queue routing (dlq) with max 5 retries for 4xx errors in pr #4832. in code review. october 19, 2026 14:00 utc #2 629104820 b/629104820 [security p3] outbound salesforce crm sync webhook retrying indefinitely on 4xx client errors assigned p3 s3 bug (integration / logic) services &gt; customer accounts &gt; crm integrations crm-ops@company.com elena_r october 31, 2026 (target: 30d sla) october 14, 2026 10:30 utc october 19, 2026 14:00 utc 7920155 crm-integrations the asynchronous crm synchronization worker retries failed 400/404 salesforce webhook tasks indefinitely without max retry caps, causing celery background queue congestion and memory accumulation on persistent 4xx client errors. /internal/v1/crm/salesforce/webhook //depot/services/clients/integrations/salesforce_sync.py retry queue metadata curl -x post &quot;https://crm.internal/internal/v1/crm/salesforce/webhook&quot; -d &#x27;{&quot;event&quot;: &quot;client_updated&quot;, &quot;client_id&quot;: &quot;invalid_id&quot;}&#x27; {&quot;status&quot;: &quot;queued&quot;, &quot;retry_count&quot;: 8421} resource starvation for legitimate customer data sync tasks across worker pods. p3/s3 integration hygiene: resolution required within 30 days (target due date: october 31, 2026 18:00 utc). crm-ops@company.com noticing memory growth in redis worker broker. a single deleted salesforce record generated over 8,000 retries. october 14, 2026 10:30 utc #1 elena_r@company.com added dead-letter queue routing (dlq) with max 5 retries for 4xx errors in pr #4832. in code review. october 19, 2026 14:00 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/629104820/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/629104820</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p3">P3</span></td>
+            <td><span class="level-badge severity-s3">S3</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/629104820/" class="bug-row-title">[Security P3] Outbound Salesforce CRM Sync Webhook Retrying Indefinitely on 4xx Client Errors</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Services &gt; Customer Accounts &gt; CRM Integrations</span>
+                    <code class="bug-row-endpoint">/internal/v1/crm/salesforce/webhook</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>el</span>@elena_r</span></td>
+            <td class="col-date">October 19, 2026 14:00 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="718294019" data-status="assigned" data-assignee="omar_h" data-priority="p2" data-severity="s2" data-component="security &gt; data privacy governance &gt; piimaskingfilter" data-type="bug (privacy / redaction)" data-hotlists="7920155 privacy-redaction gdpr-compliance" data-search="718294019 b/718294019 [privacy p2] regex pattern in piimaskingfilter missing international e.164 phone number formats assigned p2 s2 bug (privacy / redaction) security &gt; data privacy governance &gt; piimaskingfilter privacy-audit@company.com omar_h october 26, 2026 (target: 7d sla) october 17, 2026 10:00 utc october 20, 2026 15:45 utc 7920155 privacy-redaction gdpr-compliance the enterprise shared piimaskingfilter library currently matches standard us 10-digit phone numbers (`(xxx) xxx-xxxx`) but fails to redact international e.164 formatted numbers (`+44`, `+33`, `+55`), allowing unmasked non-us client phone numbers to be written to audit and application logs. piimaskingfilter middleware //depot/privacy/filters/pii_masking.py international e.164 phone numbers python3 -c &quot;from privacy.filters.pii_masking import mask_pii; print(mask_pii(&#x27;user phone: +44 20 7946 0991&#x27;))&quot; user phone: +44 20 7946 0991 (unmasked) global privacy compliance non-compliance under gdpr article 5(1)(c) data minimization rules. p2/s2 privacy finding: resolution required within 7 days (target due date: october 26, 2026 18:00 utc). privacy-audit@company.com identified during eu data governance audit. uk and german customer phone numbers are not redacted by default regex patterns. october 17, 2026 10:00 utc #1 omar_h@company.com integrating google libphonenumber parser into `piimaskingfilter` to universally redact all international dialing codes. testing pr #4844. october 20, 2026 15:45 utc #2 718294019 b/718294019 [privacy p2] regex pattern in piimaskingfilter missing international e.164 phone number formats assigned p2 s2 bug (privacy / redaction) security &gt; data privacy governance &gt; piimaskingfilter privacy-audit@company.com omar_h october 26, 2026 (target: 7d sla) october 17, 2026 10:00 utc october 20, 2026 15:45 utc 7920155 privacy-redaction gdpr-compliance the enterprise shared piimaskingfilter library currently matches standard us 10-digit phone numbers (`(xxx) xxx-xxxx`) but fails to redact international e.164 formatted numbers (`+44`, `+33`, `+55`), allowing unmasked non-us client phone numbers to be written to audit and application logs. piimaskingfilter middleware //depot/privacy/filters/pii_masking.py international e.164 phone numbers python3 -c &quot;from privacy.filters.pii_masking import mask_pii; print(mask_pii(&#x27;user phone: +44 20 7946 0991&#x27;))&quot; user phone: +44 20 7946 0991 (unmasked) global privacy compliance non-compliance under gdpr article 5(1)(c) data minimization rules. p2/s2 privacy finding: resolution required within 7 days (target due date: october 26, 2026 18:00 utc). privacy-audit@company.com identified during eu data governance audit. uk and german customer phone numbers are not redacted by default regex patterns. october 17, 2026 10:00 utc #1 omar_h@company.com integrating google libphonenumber parser into `piimaskingfilter` to universally redact all international dialing codes. testing pr #4844. october 20, 2026 15:45 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/718294019/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/718294019</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/718294019/" class="bug-row-title">[Privacy P2] Regex Pattern in PIIMaskingFilter Missing International E.164 Phone Number Formats</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Data Privacy Governance &gt; PIIMaskingFilter</span>
+                    <code class="bug-row-endpoint">PIIMaskingFilter Middleware</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>om</span>@omar_h</span></td>
+            <td class="col-date">October 20, 2026 15:45 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="829104712" data-status="assigned" data-assignee="david_p" data-priority="p2" data-severity="s2" data-component="security &gt; identity &amp; access management &gt; session security" data-type="bug (security / iam)" data-hotlists="7920155 iam-security session-hardening" data-search="829104712 b/829104712 [security p2] missing invalidation of downstream active refresh tokens on global password change assigned p2 s2 bug (security / iam) security &gt; identity &amp; access management &gt; session security redteam@company.com david_p october 27, 2026 (target: 7d sla) october 18, 2026 11:00 utc october 20, 2026 16:30 utc 7920155 iam-security session-hardening when an account owner updates their password via `/api/v1/auth/password/change`, existing oauth2 refresh tokens issued to active mobile sessions are not revoked in the central redis token bloom filter, allowing active sessions on lost or compromised devices to continuously refresh access tokens. /api/v1/auth/password/change //depot/services/auth/session/token_revocation.py long-lived refresh tokens curl -x post &quot;https://auth.internal/api/v1/auth/password/change&quot; -d &#x27;{&quot;old_password&quot;: &quot;...&quot;, &quot;new_password&quot;: &quot;...&quot;}&#x27; {&quot;status&quot;: &quot;password_updated&quot;, &quot;revoked_sessions&quot;: 1} account takeover persistence following user credential rotation. p2/s2 security vulnerability: resolution required within 7 days (target due date: october 27, 2026 18:00 utc). redteam@company.com red team poc confirmed: mobile refresh token issued before password change successfully obtained a new access token 24 hours later. october 18, 2026 11:00 utc #1 david_p@company.com implemented user-level `token_epoch_timestamp` check in jwt validation middleware (pr #4855). any token with `iat &lt; epoch` will be rejected. october 20, 2026 16:30 utc #2 829104712 b/829104712 [security p2] missing invalidation of downstream active refresh tokens on global password change assigned p2 s2 bug (security / iam) security &gt; identity &amp; access management &gt; session security redteam@company.com david_p october 27, 2026 (target: 7d sla) october 18, 2026 11:00 utc october 20, 2026 16:30 utc 7920155 iam-security session-hardening when an account owner updates their password via `/api/v1/auth/password/change`, existing oauth2 refresh tokens issued to active mobile sessions are not revoked in the central redis token bloom filter, allowing active sessions on lost or compromised devices to continuously refresh access tokens. /api/v1/auth/password/change //depot/services/auth/session/token_revocation.py long-lived refresh tokens curl -x post &quot;https://auth.internal/api/v1/auth/password/change&quot; -d &#x27;{&quot;old_password&quot;: &quot;...&quot;, &quot;new_password&quot;: &quot;...&quot;}&#x27; {&quot;status&quot;: &quot;password_updated&quot;, &quot;revoked_sessions&quot;: 1} account takeover persistence following user credential rotation. p2/s2 security vulnerability: resolution required within 7 days (target due date: october 27, 2026 18:00 utc). redteam@company.com red team poc confirmed: mobile refresh token issued before password change successfully obtained a new access token 24 hours later. october 18, 2026 11:00 utc #1 david_p@company.com implemented user-level `token_epoch_timestamp` check in jwt validation middleware (pr #4855). any token with `iat &lt; epoch` will be rejected. october 20, 2026 16:30 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/829104712/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/829104712</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/829104712/" class="bug-row-title">[Security P2] Missing Invalidation of Downstream Active Refresh Tokens on Global Password Change</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Identity &amp; Access Management &gt; Session Security</span>
+                    <code class="bug-row-endpoint">/api/v1/auth/password/change</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>da</span>@david_p</span></td>
+            <td class="col-date">October 20, 2026 16:30 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="938102941" data-status="assigned" data-assignee="sam_b" data-priority="p2" data-severity="s2" data-component="infrastructure &gt; api gateway &amp; edge &gt; rate limiting mesh" data-type="bug (security / network)" data-hotlists="7920155 gateway-security rate-limiting" data-search="938102941 b/938102941 [security p2] distributed redis rate limiting bypass via ip spoofing in multi-hop forwarded-for header assigned p2 s2 bug (security / network) infrastructure &gt; api gateway &amp; edge &gt; rate limiting mesh security-pentest@company.com sam_b october 26, 2026 (target: 7d sla) october 17, 2026 09:30 utc october 19, 2026 13:10 utc 7920155 gateway-security rate-limiting the envoy edge rate-limiting lua filter parsed the leftmost client ip from `x-forwarded-for` without validating trusted proxy hops. an attacker can bypass the 100 req/min threshold by prefixing arbitrary pseudo-random ip addresses in the `x-forwarded-for` request header. envoy ingress edge (/api/*) //depot/envoy/lua/rate_limiter.lua client ip rate quota buckets curl -h &quot;x-forwarded-for: 198.51.100.1, 10.0.0.1&quot; https://api.enterprise.internal/api/v1/auth/login http/1.1 200 ok (rate limit bypassed 500x) unrestricted credential brute-forcing against authentication endpoints via rate limit evasion. p2/s2 gateway security: resolution required within 7 days (target due date: october 26, 2026 18:00 utc). security-pentest@company.com confirmed rate limiter uses leftmost header value rather than immediate downstream socket peer ip. october 17, 2026 09:30 utc #1 sam_b@company.com configured envoy `use_remote_address: true` and `xff_num_trusted_hops: 2` in pr #4861. verifying against load tests. october 19, 2026 13:10 utc #2 938102941 b/938102941 [security p2] distributed redis rate limiting bypass via ip spoofing in multi-hop forwarded-for header assigned p2 s2 bug (security / network) infrastructure &gt; api gateway &amp; edge &gt; rate limiting mesh security-pentest@company.com sam_b october 26, 2026 (target: 7d sla) october 17, 2026 09:30 utc october 19, 2026 13:10 utc 7920155 gateway-security rate-limiting the envoy edge rate-limiting lua filter parsed the leftmost client ip from `x-forwarded-for` without validating trusted proxy hops. an attacker can bypass the 100 req/min threshold by prefixing arbitrary pseudo-random ip addresses in the `x-forwarded-for` request header. envoy ingress edge (/api/*) //depot/envoy/lua/rate_limiter.lua client ip rate quota buckets curl -h &quot;x-forwarded-for: 198.51.100.1, 10.0.0.1&quot; https://api.enterprise.internal/api/v1/auth/login http/1.1 200 ok (rate limit bypassed 500x) unrestricted credential brute-forcing against authentication endpoints via rate limit evasion. p2/s2 gateway security: resolution required within 7 days (target due date: october 26, 2026 18:00 utc). security-pentest@company.com confirmed rate limiter uses leftmost header value rather than immediate downstream socket peer ip. october 17, 2026 09:30 utc #1 sam_b@company.com configured envoy `use_remote_address: true` and `xff_num_trusted_hops: 2` in pr #4861. verifying against load tests. october 19, 2026 13:10 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/938102941/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/938102941</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/938102941/" class="bug-row-title">[Security P2] Distributed Redis Rate Limiting Bypass via IP Spoofing in Multi-Hop Forwarded-For Header</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; API Gateway &amp; Edge &gt; Rate Limiting Mesh</span>
+                    <code class="bug-row-endpoint">Envoy Ingress Edge (/api/*)</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>sa</span>@sam_b</span></td>
+            <td class="col-date">October 19, 2026 13:10 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="847291048" data-status="assigned" data-assignee="kevin_j" data-priority="p2" data-severity="s2" data-component="infrastructure &gt; cloud sre &amp; containers &gt; production clusters" data-type="bug (infrastructure / rbac)" data-hotlists="7920155 kubernetes-hardening infra-rbac" data-search="847291048 b/847291048 [security p2] overly permissive clusterrolebinding allowing list/watch secrets in default namespace assigned p2 s2 bug (infrastructure / rbac) infrastructure &gt; cloud sre &amp; containers &gt; production clusters k8s-security-scan@company.com kevin_j october 28, 2026 (target: 7d sla) october 15, 2026 14:00 utc october 19, 2026 10:15 utc 7920155 kubernetes-hardening infra-rbac static rbac analysis identified that automation service account `ci-deployer-sa` in the `production-gke` cluster was bound to `cluster-admin` instead of scoped deploymentmanager roles, granting permission to read and watch all kubernetes secrets across production namespaces. kubernetes api server (prod-gke-us-central1) //depot/kubernetes/rbac/cluster_roles.yaml cluster-wide kubernetes secrets kubectl auth can-i get secrets --as=system:serviceaccount:default:ci-deployer-sa -n prod yes privilege escalation and secret leakage if ci deployer credentials are compromised. p2/s2 infrastructure rbac: resolution required within 7 days (target due date: october 28, 2026 18:00 utc). k8s-security-scan@company.com automated security finding: serviceaccount bound to clusterrole with full secret read privileges. october 15, 2026 14:00 utc #1 kevin_j@company.com refactored `ci_deployer` permissions into targeted namespace-scoped rolebindings restricting secret access to deployment configs only (pr #4872). october 19, 2026 10:15 utc #2 847291048 b/847291048 [security p2] overly permissive clusterrolebinding allowing list/watch secrets in default namespace assigned p2 s2 bug (infrastructure / rbac) infrastructure &gt; cloud sre &amp; containers &gt; production clusters k8s-security-scan@company.com kevin_j october 28, 2026 (target: 7d sla) october 15, 2026 14:00 utc october 19, 2026 10:15 utc 7920155 kubernetes-hardening infra-rbac static rbac analysis identified that automation service account `ci-deployer-sa` in the `production-gke` cluster was bound to `cluster-admin` instead of scoped deploymentmanager roles, granting permission to read and watch all kubernetes secrets across production namespaces. kubernetes api server (prod-gke-us-central1) //depot/kubernetes/rbac/cluster_roles.yaml cluster-wide kubernetes secrets kubectl auth can-i get secrets --as=system:serviceaccount:default:ci-deployer-sa -n prod yes privilege escalation and secret leakage if ci deployer credentials are compromised. p2/s2 infrastructure rbac: resolution required within 7 days (target due date: october 28, 2026 18:00 utc). k8s-security-scan@company.com automated security finding: serviceaccount bound to clusterrole with full secret read privileges. october 15, 2026 14:00 utc #1 kevin_j@company.com refactored `ci_deployer` permissions into targeted namespace-scoped rolebindings restricting secret access to deployment configs only (pr #4872). october 19, 2026 10:15 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/847291048/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/847291048</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/847291048/" class="bug-row-title">[Security P2] Overly Permissive ClusterRoleBinding Allowing List/Watch Secrets in Default Namespace</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; Cloud SRE &amp; Containers &gt; Production Clusters</span>
+                    <code class="bug-row-endpoint">Kubernetes API Server (prod-gke-us-central1)</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ke</span>@kevin_j</span></td>
+            <td class="col-date">October 19, 2026 10:15 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="758291043" data-status="assigned" data-assignee="andre_f" data-priority="p2" data-severity="s2" data-component="infrastructure &gt; cloud sre &amp; containers &gt; secrets manager" data-type="bug (infrastructure / secrets)" data-hotlists="7920155 secrets-management vault-infra" data-search="758291043 b/758291043 [security p2] automatic secret rotation hook failing silently on third-party webhook tls handshake assigned p2 s2 bug (infrastructure / secrets) infrastructure &gt; cloud sre &amp; containers &gt; secrets manager secrets-vault-audit@company.com andre_f october 27, 2026 (target: 7d sla) october 16, 2026 11:30 utc october 20, 2026 14:20 utc 7920155 secrets-management vault-infra the vault 30-day credential rotation daemon for third-party payment partner webhooks encountered tls handshake failures during cert renegotiation and swallowed the exception without raising an alert in sentry, leaving legacy secrets active past the 30-day rotation slo. hashicorp vault rotation worker //depot/infra/vault/rotation_worker.py expired secret rotation logs python3 //depot/infra/vault/rotation_worker.py --test-rotate --secret=stripe-webhook-signing-key {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;sslcertverificationerror&quot;, &quot;exit_code&quot;: 0} unrotated static credentials violating enterprise 30-day secret rotation policy. p2/s2 secrets management: resolution required within 7 days (target due date: october 27, 2026 18:00 utc). secrets-vault-audit@company.com auditor detected signing key `stripe-webhook-prod` has not been rotated in 45 days despite 30-day policy. october 16, 2026 11:30 utc #1 andre_f@company.com fixed exception swallowing in `rotation_worker.py` and added pagerduty critical alerts when rotation fails (pr #4880). manually triggered rotation successfully. october 20, 2026 14:20 utc #2 758291043 b/758291043 [security p2] automatic secret rotation hook failing silently on third-party webhook tls handshake assigned p2 s2 bug (infrastructure / secrets) infrastructure &gt; cloud sre &amp; containers &gt; secrets manager secrets-vault-audit@company.com andre_f october 27, 2026 (target: 7d sla) october 16, 2026 11:30 utc october 20, 2026 14:20 utc 7920155 secrets-management vault-infra the vault 30-day credential rotation daemon for third-party payment partner webhooks encountered tls handshake failures during cert renegotiation and swallowed the exception without raising an alert in sentry, leaving legacy secrets active past the 30-day rotation slo. hashicorp vault rotation worker //depot/infra/vault/rotation_worker.py expired secret rotation logs python3 //depot/infra/vault/rotation_worker.py --test-rotate --secret=stripe-webhook-signing-key {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;sslcertverificationerror&quot;, &quot;exit_code&quot;: 0} unrotated static credentials violating enterprise 30-day secret rotation policy. p2/s2 secrets management: resolution required within 7 days (target due date: october 27, 2026 18:00 utc). secrets-vault-audit@company.com auditor detected signing key `stripe-webhook-prod` has not been rotated in 45 days despite 30-day policy. october 16, 2026 11:30 utc #1 andre_f@company.com fixed exception swallowing in `rotation_worker.py` and added pagerduty critical alerts when rotation fails (pr #4880). manually triggered rotation successfully. october 20, 2026 14:20 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/758291043/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/758291043</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p2">P2</span></td>
+            <td><span class="level-badge severity-s2">S2</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/758291043/" class="bug-row-title">[Security P2] Automatic Secret Rotation Hook Failing Silently on Third-Party Webhook TLS Handshake</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Infrastructure &gt; Cloud SRE &amp; Containers &gt; Secrets Manager</span>
+                    <code class="bug-row-endpoint">HashiCorp Vault Rotation Worker</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>an</span>@andre_f</span></td>
+            <td class="col-date">October 20, 2026 14:20 UTC</td>
+        </tr>
+        
+
+        <tr id="noResultsRow" class="empty-state" style="display: none;">
+            <td colspan="8">
+                <i class="material-icons">search_off</i>
+                <strong>No bugs found matching your query criteria.</strong>
+                <span>Try refining your search terms or clearing the filter query.</span>
+            </td>
+        </tr>
+  
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const filterInput = document.getElementById('hotlistFilterInput');
+        const tableClearBtn = document.getElementById('tableClearBtn');
+        const resultsCounter = document.getElementById('tableResultsCounter');
+        const matchingCountBadge = document.getElementById('matchingCountBadge');
+
+        function matchRowAtomic(row, token) {
+            const status = (row.dataset.status || '').toLowerCase();
+            const assignee = (row.dataset.assignee || '').toLowerCase();
+            const priority = (row.dataset.priority || '').toUpperCase();
+            const severity = (row.dataset.severity || '').toUpperCase();
+            const component = (row.dataset.component || '').toLowerCase();
+            const type = (row.dataset.type || '').toLowerCase();
+            const hotlists = (row.dataset.hotlists || '').toLowerCase();
+            const rowId = (row.dataset.id || '').toLowerCase();
+            const searchBlob = (row.dataset.search || (row.textContent + ' ' + rowId)).toLowerCase();
+
+            if (token.includes(':')) {
+                const parts = token.split(':');
+                const k = parts[0].toLowerCase();
+                const rawV = parts.slice(1).join(':').trim();
+                const v = rawV.replace(/^"|"$/g, '').toLowerCase();
+
+                if (k === 'status' || k === 'state') {
+                    if (v === 'open') return !['fixed', 'verified', 'closed'].includes(status);
+                    if (['closed', 'done'].includes(v)) return ['fixed', 'verified', 'closed'].includes(status);
+                    return status.includes(v);
+                } else if (k === 'assignee' || k === 'owner' || k === 'user') {
+                    const targetAssignee = v.replace(/^@/, '');
+                    if (['none', 'unassigned', 'empty', 'null'].includes(targetAssignee)) {
+                        return assignee === 'unassigned' || assignee === '';
+                    }
+                    return assignee.includes(targetAssignee);
+                } else if (k === 'priority' || k === 'p') {
+                    let p = v.toUpperCase();
+                    if (!p.startsWith('P')) p = 'P' + p;
+                    return priority === p;
+                } else if (k === 'severity' || k === 's') {
+                    let s = v.toUpperCase();
+                    if (!s.startsWith('S')) s = 'S' + s;
+                    return severity === s;
+                } else if (k === 'component' || k === 'comp') {
+                    if (!(rawV.startsWith('"') && rawV.endsWith('"') && rawV.length > 2)) {
+                        return false;
+                    }
+                    if (v === 'iam') return component.includes('iam') || component.includes('identity') || component.includes('access management');
+                    if (v === 'infra') return component.includes('infra') || component.includes('infrastructure') || component.includes('docker') || component.includes('container');
+                    if (v === 'payments') return component.includes('payment') || component.includes('billing') || component.includes('financial');
+                    if (v === 'privacy') return component.includes('privacy') || component.includes('gdpr') || component.includes('compliance');
+                    if (v === 'gateway') return component.includes('gateway') || component.includes('edge') || component.includes('envoy') || component.includes('waf');
+                    return component.includes(v);
+                } else if (k === 'type' || k === 'kind') {
+                    return type.includes(v);
+                } else if (k === 'id' || k === 'bug') {
+                    const vClean = v.replace('b/', '');
+                    return rowId.includes(vClean) || searchBlob.includes(vClean);
+                } else if (k === 'hotlist' || k === 'hl') {
+                    return hotlists.includes(v);
+                }
+            }
+
+            return searchBlob.includes(token.toLowerCase());
+        }
+
+        function evaluateRowQuery(row, queryStr) {
+            if (!queryStr || !queryStr.trim()) return true;
+
+            const pattern = /(\(|\))|(\bAND\b|\bOR\b|\bNOT\b|&&|\|\||!|\|)|(\b[a-zA-Z_]+:(?:"[^"]*"|[^\s()]+))|("[^"]+")|([^\s()]+)/g;
+            const rawTokens = [];
+            let match;
+            while ((match = pattern.exec(queryStr)) !== null) {
+                const [full, paren, op, kv, phrase, word] = match;
+                if (paren) {
+                    rawTokens.push({ type: 'PAREN', val: paren });
+                } else if (op) {
+                    const opUpper = op.toUpperCase();
+                    if (['AND', '&&', '&'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'AND' });
+                    else if (['OR', '||', '|'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'OR' });
+                    else if (['NOT', '!'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'NOT' });
+                } else if (kv) {
+                    rawTokens.push({ type: 'KV', val: kv });
+                } else if (phrase) {
+                    rawTokens.push({ type: 'QUOTED_STRING', val: phrase.slice(1, -1) });
+                } else if (word) {
+                    const wUpper = word.toUpperCase();
+                    if (['AND', 'OR', 'NOT'].includes(wUpper)) {
+                        rawTokens.push({ type: 'OP', val: wUpper });
+                    } else {
+                        rawTokens.push({ type: 'UNQUOTED_WORD', val: word });
+                    }
+                }
+            }
+
+            if (rawTokens.length === 0) return true;
+
+            // Insert implicit AND between consecutive value tokens
+            const tokens = [];
+            for (let i = 0; i < rawTokens.length; i++) {
+                if (i > 0) {
+                    const prev = rawTokens[i - 1];
+                    const curr = rawTokens[i];
+                    const prevIsVal = (prev.type === 'KV' || prev.type === 'QUOTED_STRING' || prev.type === 'UNQUOTED_WORD' || (prev.type === 'PAREN' && prev.val === ')'));
+                    const currIsVal = (curr.type === 'KV' || curr.type === 'QUOTED_STRING' || curr.type === 'UNQUOTED_WORD' || (curr.type === 'PAREN' && curr.val === '(') || (curr.type === 'OP' && curr.val === 'NOT'));
+                    if (prevIsVal && currIsVal) {
+                        tokens.push({ type: 'OP', val: 'AND' });
+                    }
+                }
+                tokens.push(rawTokens[i]);
+            }
+
+            // Shunting-Yard to Postfix (RPN)
+            const precedence = { 'NOT': 3, 'AND': 2, 'OR': 1 };
+            const outputQueue = [];
+            const opStack = [];
+
+            for (const t of tokens) {
+                if (t.type === 'KV' || t.type === 'QUOTED_STRING' || t.type === 'UNQUOTED_WORD') {
+                    outputQueue.push(t);
+                } else if (t.type === 'OP') {
+                    while (opStack.length > 0 && opStack[opStack.length - 1].type === 'OP' &&
+                           (precedence[opStack[opStack.length - 1].val] || 0) >= (precedence[t.val] || 0)) {
+                        outputQueue.push(opStack.pop());
+                    }
+                    opStack.push(t);
+                } else if (t.type === 'PAREN') {
+                    if (t.val === '(') {
+                        opStack.push(t);
+                    } else if (t.val === ')') {
+                        while (opStack.length > 0 && !(opStack[opStack.length - 1].type === 'PAREN' && opStack[opStack.length - 1].val === '(')) {
+                            outputQueue.push(opStack.pop());
+                        }
+                        if (opStack.length > 0 && opStack[opStack.length - 1].val === '(') {
+                            opStack.pop();
+                        }
+                    }
+                }
+            }
+
+            while (opStack.length > 0) {
+                const op = opStack.pop();
+                if (op.type === 'OP') outputQueue.push(op);
+            }
+
+            // Evaluate RPN
+            const evalStack = [];
+            for (const item of outputQueue) {
+                if (item.type === 'KV') {
+                    evalStack.push(matchRowAtomic(row, item.val));
+                } else if (item.type === 'QUOTED_STRING') {
+                    const searchBlob = (row.dataset.search || (row.textContent + ' ' + (row.dataset.id || ''))).toLowerCase();
+                    evalStack.push(searchBlob.includes(item.val.toLowerCase()));
+                } else if (item.type === 'UNQUOTED_WORD') {
+                    evalStack.push(false);
+                } else if (item.type === 'OP') {
+                    if (item.val === 'NOT') {
+                        const v = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(!v);
+                    } else if (item.val === 'AND') {
+                        const b = evalStack.length > 0 ? evalStack.pop() : false;
+                        const a = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(a && b);
+                    } else if (item.val === 'OR') {
+                        const b = evalStack.length > 0 ? evalStack.pop() : false;
+                        const a = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(a || b);
+                    }
+                }
+            }
+
+            return evalStack.length > 0 ? evalStack[evalStack.length - 1] : true;
+        }
+
+        function filterTable(qStr) {
+            const rows = document.querySelectorAll('#hotlistTable tbody tr:not(#noResultsRow)');
+            const totalCount = rows.length;
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                if (evaluateRowQuery(row, qStr)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const noResultsRow = document.getElementById('noResultsRow');
+            if (noResultsRow) {
+                noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
+            }
+
+            if (resultsCounter) {
+                resultsCounter.innerHTML = `Showing <strong>${visibleCount}</strong> of ${totalCount} bugs`;
+            }
+            if (matchingCountBadge) {
+                matchingCountBadge.textContent = visibleCount;
+            }
+
+            if (tableClearBtn) {
+                tableClearBtn.style.display = qStr ? 'inline-flex' : 'none';
+            }
+        }
+
+        function clearAllFilters() {
+            if (filterInput) filterInput.value = '';
+            const url = new URL(window.location);
+            url.searchParams.delete('q');
+            window.history.pushState({}, '', url);
+            filterTable('');
+        }
+
+        if (filterInput) {
+            filterInput.addEventListener('input', function() {
+                filterTable(this.value);
+            });
+            filterInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const url = new URL(window.location);
+                    if (this.value) {
+                        url.searchParams.set('q', this.value);
+                    } else {
+                        url.searchParams.delete('q');
+                    }
+                    window.history.pushState({}, '', url);
+                    filterTable(this.value);
+                }
+            });
+        }
+
+        if (tableClearBtn) {
+            tableClearBtn.addEventListener('click', clearAllFilters);
+        }
+
+
+        const initialQuery = new URLSearchParams(window.location.search).get('q');
+        if (filterInput && initialQuery) {
+            filterInput.value = initialQuery;
+        }
+
+        // Initialize state on load
+        if (filterInput && filterInput.value) {
+            filterTable(filterInput.value);
+        }
+    </script>
+
+    <script>
+    // Static-site stand-in for the Issue Tracker server (see scripts/build_pages.py).
+    (function () {
+        const BUILD_TIME = 1792587548359;
+        const PAGE = {"kind": "hotlist", "id": "7920155"};
+        const KEY = 'pi2-static-tracker';
+        const DAY = 86400000;
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                        'August', 'September', 'October', 'November', 'December'];
+        const DATE_RE = new RegExp('\\b(' + MONTHS.join('|') + ') (\\d{2}), (\\d{4})\\b', 'g');
+        const dayShift = Math.floor(Date.now() / DAY) - Math.floor(BUILD_TIME / DAY);
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const fmtDate = (d) => `${MONTHS[d.getUTCMonth()]} ${pad(d.getUTCDate())}, ${d.getUTCFullYear()}`;
+        const nowStr = () => {
+            const d = new Date();
+            return `${fmtDate(d)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+        };
+        const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }[ch]));
+
+        function load() {
+            try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+        }
+        function save(state) {
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        }
+
+        // Keep build-time dates relative to today, as the live server does at startup.
+        function shiftDates() {
+            if (dayShift <= 0) return;
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+            nodes.forEach((n) => {
+                const shifted = n.nodeValue.replace(DATE_RE, (m, mon, day, year) =>
+                    fmtDate(new Date(Date.UTC(+year, MONTHS.indexOf(mon), +day + dayShift))));
+                if (shifted !== n.nodeValue) n.nodeValue = shifted;
+            });
+        }
+
+        // Mirrors render_comments_html() in apps/buganizer/controller.py.
+        function commentCard(c) {
+            const rawAuthor = c.author.split('@')[0].split('(')[0].trim();
+            let initials = rawAuthor.split(/\s+/).filter(Boolean).slice(0, 2)
+                .map((part) => part[0].toUpperCase()).join('');
+            if (!initials) initials = rawAuthor.slice(0, 2).toUpperCase();
+            let sum = 0;
+            for (const ch of rawAuthor) sum += ch.codePointAt(0);
+            const tone = sum % 6 + 1;
+            return `
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-${tone}">${esc(initials)}</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>${esc(c.author)}</strong></span>
+                    <span class="report-date"><span class="comment-number">${esc(c.number)}</span> &bull; commented on ${esc(c.date)}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            ${esc(c.text).replace(/\n/g, '<br>')}
+        </div>
+    </div>`;
+        }
+
+        function applyToIssuePage(st) {
+            const comments = st.comments || [];
+            const container = document.getElementById('commentsContainer');
+            comments.forEach((c) => container.insertAdjacentHTML('beforeend', commentCard(c)));
+            const count = document.querySelector('.section-heading .count');
+            if (count) count.textContent = PAGE.baseComments + comments.length;
+            if (st.assignee !== undefined) {
+                document.getElementById('assigneeInput').value = st.assignee;
+                document.querySelectorAll('.status-chip').forEach((chip) => {
+                    chip.className = chip.className.replace(/status-\S+/, 'status-assigned');
+                });
+                document.getElementById('statusText').textContent = 'Assigned';
+                const headerChip = document.querySelector('.bug-id-row .status-chip');
+                if (headerChip) headerChip.textContent = 'Assigned';
+            }
+            if (st.modified) document.getElementById('lastModifiedDate').textContent = st.modified;
+        }
+
+        function applyToHotlistRow(row, st) {
+            const cells = row.children;
+            if (st.assignee !== undefined) {
+                row.dataset.assignee = (st.assignee || 'unassigned').toLowerCase();
+                row.dataset.status = 'assigned';
+                cells[4].innerHTML = '<span class="status-chip status-assigned">Assigned</span>';
+                cells[6].innerHTML = st.assignee
+                    ? `<span class='assignee-chip'><span class='mini-avatar'>${esc(st.assignee.slice(0, 2))}</span>@${esc(st.assignee)}</span>`
+                    : "<span class='assignee-chip unassigned'>Unassigned</span>";
+            }
+            const extra = (st.comments || []).map((c) => `${c.author} ${c.text} ${c.number}`).join(' ');
+            row.dataset.search = `${row.dataset.search} ${st.assignee || ''} ${extra}`.toLowerCase();
+            if (st.modified) cells[7].textContent = st.modified;
+        }
+
+        // Answer the issue page's POST calls from localStorage instead of the server.
+        const realFetch = window.fetch.bind(window);
+        window.fetch = function (url, opts) {
+            const m = String(url).match(/^\/api\/issues\/(\d+)\/(comments|assign)$/);
+            if (!m) return realFetch(url, opts);
+            const body = JSON.parse((opts && opts.body) || '{}');
+            const state = load();
+            const st = state[m[1]] = state[m[1]] || { comments: [] };
+            const now = nowStr();
+            let result;
+            if (m[2] === 'comments') {
+                const number = PAGE.baseComments + st.comments.length + 1;
+                const comment = {
+                    number: `#${number}`,
+                    author: body.author || 'security-triage@company.com',
+                    date: now,
+                    text: (body.text || '').trim(),
+                };
+                st.comments.push(comment);
+                result = { success: true, comment: comment, total_comments: number };
+            } else {
+                const assignee = (body.assignee_ldap || '').trim().replace(/^@+/, '');
+                st.assignee = assignee;
+                result = { success: true, bug_id: m[1], assignee_ldap: assignee, status: 'Assigned' };
+            }
+            st.modified = now;
+            save(state);
+            return Promise.resolve(new Response(JSON.stringify(result), {
+                status: 200, headers: { 'Content-Type': 'application/json' },
+            }));
+        };
+
+        shiftDates();
+        const state = load();
+        if (PAGE.kind === 'issue' && state[PAGE.id]) {
+            applyToIssuePage(state[PAGE.id]);
+        } else if (PAGE.kind === 'hotlist') {
+            document.querySelectorAll('#issuesTableBody tr[data-id]').forEach((row) => {
+                if (state[row.dataset.id]) applyToHotlistRow(row, state[row.dataset.id]);
+            });
+            // The page already filtered on load; redo it now that rows reflect local changes.
+            const input = document.getElementById('hotlistFilterInput');
+            if (input && input.value && typeof filterTable === 'function') filterTable(input.value);
+        }
+    })();
+    </script>
+
+    <div class="static-demo-badge" style="position:fixed;left:12px;bottom:12px;z-index:50;display:flex;gap:10px;align-items:center;padding:6px 12px;border-radius:999px;background:#202124;color:#fff;font:500 12px/1.4 Inter,system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+        <span>Static demo &middot; changes are saved in this browser only</span>
+        <a href="#" onclick="try{localStorage.removeItem('pi2-static-tracker')}catch(e){};location.reload();return false;" style="color:#8ab4f8;">Reset</a>
+        <a href="../../../" style="color:#8ab4f8;">Docs</a>
+    </div>
+</body>
+</html>

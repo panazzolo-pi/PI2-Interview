@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Security Incident Triage Queue (P1/S1) · Issue Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../tracker/static/buganizer.css">
+</head>
+<body>
+    <!-- Top App Bar -->
+    <header class="app-bar">
+        <a href="../../../tracker/hotlists/5829104/" class="brand">
+            <span class="brand-mark"><i class="material-icons">bug_report</i></span>
+            <span class="brand-name">Issue Tracker</span>
+        </a>
+
+        <nav class="app-nav" aria-label="Hotlists">
+            <a href="../../../tracker/hotlists/5829104/" class="app-nav-link active" title="Active Incident Triage Queue (hotlist:5829104)">
+                <i class="material-icons">priority_high</i>
+                <span class="nav-label">Triage Queue</span>
+                <span class="nav-count">2</span>
+            </a>
+            <a href="../../../tracker/hotlists/7920155/" class="app-nav-link " title="Enterprise Vulnerability Inventory &amp; Backlog (hotlist:7920155)">
+                <i class="material-icons">inventory_2</i>
+                <span class="nav-label">Inventory &amp; Backlog</span>
+                <span class="nav-count">24</span>
+            </a>
+        </nav>
+
+        <div class="app-bar-right">
+            <a href="../../../directory/" target="_blank" class="tool-link" title="Open Team Directory to find service owners">
+                <i class="material-icons">corporate_fare</i>
+                <span>Team &amp; Ownership Directory</span>
+                <i class="material-icons ext-icon">open_in_new</i>
+            </a>
+            <div class="user-avatar" title="Logged in as security-triage@company.com">SE</div>
+        </div>
+    </header>
+
+    <main class="page">
+        <!-- Hotlist Header -->
+        <section class="page-header">
+            <div class="breadcrumbs">
+                <a href="../../../tracker/hotlists/5829104/">Hotlists</a>
+                <i class="material-icons">chevron_right</i>
+                <span class="current">hotlist:5829104</span>
+            </div>
+            <div class="page-title-row">
+                <div class="page-icon tone-red">
+                    <i class="material-icons">priority_high</i>
+                </div>
+                <div>
+                    <h1 class="page-title">Security Incident Triage Queue (P1/S1)</h1>
+                    <p class="page-desc">Curated queue of active high-priority security and privacy findings requiring immediate triage review, ownership routing, and assignee follow-up.</p>
+                </div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-label">Owner</span>
+                    <span class="stat-value" title="security-triage@company.com">security-triage@company.com</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total in hotlist</span>
+                    <span class="stat-value big">2</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Matching filter</span>
+                    <span class="stat-value big" id="matchingCountBadge">2</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Status</span>
+                    <span class="stat-value"><span class="status-chip status-active">Active Triage</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issues Panel -->
+        <section class="card table-panel">
+            <div class="table-toolbar">
+                <div class="table-search">
+                    <i class="material-icons search-input-icon">search</i>
+                    <input type="text" id="hotlistFilterInput" placeholder="Search bugs" value="" autofocus autocomplete="off" spellcheck="false">
+                    <button type="button" id="tableClearBtn" class="search-clear-icon" title="Clear filter" style="display: none;">
+                        <i class="material-icons" style="font-size: 16px;">close</i>
+                    </button>
+                </div>
+                <span class="table-results-counter" id="tableResultsCounter">Showing <strong>2</strong> of 2 bugs</span>
+                <button class="btn" onclick="clearAllFilters()">
+                    <i class="material-icons">restart_alt</i> Clear Filter
+                </button>
+                <button class="btn ghost" onclick="window.location.reload()" title="Refresh">
+                    <i class="material-icons">refresh</i>
+                </button>
+            </div>
+
+            <!-- Search Syntax Helper -->
+            <div class="search-syntax-help">
+                <span class="syntax-label"><i class="material-icons">manage_search</i> Query syntax</span>
+                <span class="syntax-chip"><code>status:&lt;open|assigned|triaged|blocked|fixed&gt;</code></span>
+                <span class="syntax-chip"><code>assignee:&lt;ldap|none&gt;</code></span>
+                <span class="syntax-chip"><code>priority:&lt;p0|p1|p2|p3&gt;</code></span>
+                <span class="syntax-chip"><code>component:"&lt;iam|payments|privacy|infra|gateway&gt;"</code></span>
+                <span class="syntax-chip"><code>&lt;AND | OR | NOT | ( )&gt;</code></span>
+                <span class="syntax-chip"><code>"&lt;exact phrase&gt;"</code></span>
+            </div>
+
+            <!-- Issues Table -->
+            <div class="table-scroll">
+                <table class="hotlist-table" id="hotlistTable">
+                    <thead>
+                        <tr>
+                            <th class="col-check"><input type="checkbox" disabled></th>
+                            <th>Issue ID</th>
+                            <th>Priority</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Title &amp; Summary</th>
+                            <th>Assignee</th>
+                            <th>Last Modified</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issuesTableBody">
+                        
+        <tr  data-id="543338174" data-status="assigned" data-assignee="maya_l" data-priority="p1" data-severity="s1" data-component="security &gt; financial &amp; payments security &gt; webhook ingress" data-type="vulnerability (financial / webhook forgery)" data-hotlists="5829104 7920155 p1-security-incident pci-dss-review payment-gateway" data-search="543338174 b/543338174 [internal security finding] insecure webhook signature verification in payments webhook handler (/api/v1/payments/webhook) assigned p1 s1 vulnerability (financial / webhook forgery) security &gt; financial &amp; payments security &gt; webhook ingress johndoe@company.com (john doe - internal privacy assurance) maya_l october 23, 2026 (approaching slo deadline - 2 days remaining) october 17, 2026 14:00 utc october 18, 2026 14:20 utc 5829104 7920155 p1-security-incident pci-dss-review payment-gateway during an internal security review of the payments platform, privacy &amp; security assurance discovered that the payment callback handler at &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; accepts incoming transaction status notifications without validating the cryptographic hmac-sha256 signature passed in the &lt;code&gt;x-signature&lt;/code&gt; http header. /api/v1/payments/webhook //depot/services/payments/webhook_handler.py &lt;code&gt;x-signature&lt;/code&gt; header is parsed but never cryptographically verified against the shared secret key. &lt;code&gt;transaction_id&lt;/code&gt; and &lt;code&gt;status&lt;/code&gt; accepted from arbitrary unauthenticated post callers. &lt;code&gt;payment_amount&lt;/code&gt; and &lt;code&gt;settlement_status&lt;/code&gt; can be forged to complete orders without actual payment. curl -x post &quot;https://payments.enterprise.internal/api/v1/payments/webhook&quot; \
+  -h &quot;content-type: application/json&quot; \
+  -d &#x27;{&quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;order_id&quot;: &quot;ord_8812&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;amount_paid&quot;: 450.00}&#x27; {
+  &quot;status&quot;: &quot;ack&quot;,
+  &quot;transaction_id&quot;: &quot;tx_99214a&quot;,
+  &quot;message&quot;: &quot;payment confirmed and order ord_8812 marked as settled.&quot;
+} critical financial security risk. an attacker or malicious party can forge arbitrary payment confirmation webhooks to settle unpaid invoices or unlock premium services without completing actual payment gateway transactions. p1/s1 financial &amp; payment infrastructure vulnerability: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with payment gateway security standards. johndoe@company.com hi security triage,
+
+we discovered that the payments webhook handler at &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; does not verify hmac-sha256 signatures before updating transaction statuses in the database. anyone on the network can post fake payment success events.
+
+please see the report description above for reproduction curl and details. october 17, 2026 14:00 utc #1 security-triage@company.com assigning ticket to &lt;strong&gt;@david_p&lt;/strong&gt; (iam &amp; auth security) to investigate authentication controls on &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;. october 17, 2026 14:30 utc #2 security-triage@company.com hi &lt;strong&gt;@david_p&lt;/strong&gt;, checking in to see if you are the correct person to oversee this issue and if you have context on what is going on with &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;? october 18, 2026 10:15 utc #3 david_p@company.com hi security triage,
+
+i do not own nor work on the payments &amp; billing services or the &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; endpoint. my team (iam &amp; access management) only maintains central authentication tokens and sso infrastructure (&lt;code&gt;//depot/identity/...&lt;/code&gt;).
+
+per the team directory, &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt; belongs to payments &amp; billing platform. reassigning ticket to &lt;strong&gt;@maya_l&lt;/strong&gt; (primary on-call).
+
+thanks,
+david park (iam security) october 18, 2026 11:30 utc #4 maya_l@company.com thanks david. confirming i am the correct owner for payments &amp; billing platform and &lt;code&gt;/api/v1/payments/webhook&lt;/code&gt;. acknowledging the p1 finding. i will investigate the hmac signature verification logic and prepare a hotfix pr today/tomorrow. october 18, 2026 14:20 utc #5 543338174 b/543338174 [internal security finding] insecure webhook signature verification in payments webhook handler (/api/v1/payments/webhook) assigned p1 s1 vulnerability (financial / webhook forgery) security &gt; financial &amp; payments security &gt; webhook ingress johndoe@company.com (john doe - internal privacy assurance) maya_l october 23, 2026 (approaching slo deadline - 2 days remaining) october 17, 2026 14:00 utc october 18, 2026 14:20 utc 5829104 7920155 p1-security-incident pci-dss-review payment-gateway during an internal security review of the payments platform, privacy &amp; security assurance discovered that the payment callback handler at /api/v1/payments/webhook accepts incoming transaction status notifications without validating the cryptographic hmac-sha256 signature passed in the x-signature http header. /api/v1/payments/webhook //depot/services/payments/webhook_handler.py x-signature header is parsed but never cryptographically verified against the shared secret key. transaction_id and status accepted from arbitrary unauthenticated post callers. payment_amount and settlement_status can be forged to complete orders without actual payment. curl -x post &quot;https://payments.enterprise.internal/api/v1/payments/webhook&quot; \ -h &quot;content-type: application/json&quot; \ -d &#x27;{&quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;order_id&quot;: &quot;ord_8812&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;amount_paid&quot;: 450.00}&#x27; { &quot;status&quot;: &quot;ack&quot;, &quot;transaction_id&quot;: &quot;tx_99214a&quot;, &quot;message&quot;: &quot;payment confirmed and order ord_8812 marked as settled.&quot; } critical financial security risk. an attacker or malicious party can forge arbitrary payment confirmation webhooks to settle unpaid invoices or unlock premium services without completing actual payment gateway transactions. p1/s1 financial &amp; payment infrastructure vulnerability: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with payment gateway security standards. johndoe@company.com hi security triage, we discovered that the payments webhook handler at /api/v1/payments/webhook does not verify hmac-sha256 signatures before updating transaction statuses in the database. anyone on the network can post fake payment success events. please see the report description above for reproduction curl and details. october 17, 2026 14:00 utc #1 security-triage@company.com assigning ticket to @david_p (iam &amp; auth security) to investigate authentication controls on /api/v1/payments/webhook . october 17, 2026 14:30 utc #2 security-triage@company.com hi @david_p , checking in to see if you are the correct person to oversee this issue and if you have context on what is going on with /api/v1/payments/webhook ? october 18, 2026 10:15 utc #3 david_p@company.com hi security triage, i do not own nor work on the payments &amp; billing services or the /api/v1/payments/webhook endpoint. my team (iam &amp; access management) only maintains central authentication tokens and sso infrastructure ( //depot/identity/... ). per the team directory, /api/v1/payments/webhook belongs to payments &amp; billing platform. reassigning ticket to @maya_l (primary on-call). thanks, david park (iam security) october 18, 2026 11:30 utc #4 maya_l@company.com thanks david. confirming i am the correct owner for payments &amp; billing platform and /api/v1/payments/webhook . acknowledging the p1 finding. i will investigate the hmac signature verification logic and prepare a hotfix pr today/tomorrow. october 18, 2026 14:20 utc #5">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/543338174/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/543338174</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-assigned">Assigned</span></td>
+            <td>
+                <a href="../../../tracker/issues/543338174/" class="bug-row-title">[Internal Security Finding] Insecure Webhook Signature Verification in Payments Webhook Handler (/api/v1/payments/webhook)</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Financial &amp; Payments Security &gt; Webhook Ingress</span>
+                    <code class="bug-row-endpoint">/api/v1/payments/webhook</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip'><span class='mini-avatar'>ma</span>@maya_l</span></td>
+            <td class="col-date">October 18, 2026 14:20 UTC</td>
+        </tr>
+        
+
+        <tr  data-id="618294710" data-status="triaged" data-assignee="unassigned" data-priority="p1" data-severity="s1" data-component="security &gt; privacy &amp; data protection &gt; customer data api" data-type="vulnerability (internal privacy / pii leakage)" data-hotlists="5829104 7920155 p1-security-incident gdpr-review internal-audit-2026" data-search="618294710 b/618294710 [internal security finding] customer account api (/api/v2/clients/details) leaking sensitive client pii (ssn, home address, phone) in unauthenticated responses triaged p1 s1 vulnerability (internal privacy / pii leakage) security &gt; privacy &amp; data protection &gt; customer data api johndoe@company.com (john doe - internal privacy assurance) october 23, 2026 (target: 48h sla) october 20, 2026 18:00 utc october 20, 2026 18:30 utc 5829104 7920155 p1-security-incident gdpr-review internal-audit-2026 during an internal security and privacy assessment of the customer account platform, privacy assurance identified that the customer account data api endpoint &lt;code&gt;/api/v2/clients/{client_id}/details&lt;/code&gt; returns unredacted personally identifiable information (pii) including full social security numbers (ssn), cleartext residential addresses, mobile numbers, and dates of birth without verifying field-level access permissions or applying data masking filters. /api/v2/clients/details //depot/services/customer_api/controller.py &lt;code&gt;ssn&lt;/code&gt; (full 9-digit social security number in plaintext) &lt;code&gt;residential_address&lt;/code&gt; (street address, city, postal code) &lt;code&gt;phone_number&lt;/code&gt; (primary mobile phone) &lt;code&gt;date_of_birth&lt;/code&gt; (client birthdate: yyyy-mm-dd) &lt;code&gt;billing_email&lt;/code&gt; (personal contact email) curl -x get &quot;https://api.enterprise.internal/api/v2/clients/489201a/details&quot; \
+  -h &quot;accept: application/json&quot; {
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;client_id&quot;: &quot;client_489201a&quot;,
+  &quot;full_name&quot;: &quot;john doe&quot;,
+  &quot;ssn&quot;: &quot;987-65-4321&quot;,
+  &quot;date_of_birth&quot;: &quot;1985-04-12&quot;,
+  &quot;phone_number&quot;: &quot;+1-555-019-2834&quot;,
+  &quot;residential_address&quot;: &quot;742 evergreen terrace, springfield, or 97477&quot;,
+  &quot;billing_email&quot;: &quot;johndoe@example.com&quot;,
+  &quot;account_tier&quot;: &quot;enterprise_gold&quot;
+} mass exposure of sensitive customer pii without masking. direct violation of internal data protection policy, gdpr article 32, and ccpa, presenting high regulatory compliance and data breach risks. critical p1/s1 pii exposure: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with enterprise data protection policy. johndoe@company.com hi security triage,
+
+during our q3 internal privacy audit of user-facing microservices, we noticed a critical pii data leakage in the customer account api (&lt;code&gt;/api/v2/clients/details&lt;/code&gt;). the endpoint returns raw database objects with unmasked ssns, residential addresses, and phone numbers.
+
+please see the report description above for reproduction curl and sample json payload. october 20, 2026 18:00 utc #1 security-triage@company.com acknowledging report and confirming p1/s1 classification. currently looking up the owning team in the service ownership directory to route to the customer account primary on-call. october 20, 2026 18:30 utc #2 618294710 b/618294710 [internal security finding] customer account api (/api/v2/clients/details) leaking sensitive client pii (ssn, home address, phone) in unauthenticated responses triaged p1 s1 vulnerability (internal privacy / pii leakage) security &gt; privacy &amp; data protection &gt; customer data api johndoe@company.com (john doe - internal privacy assurance) october 23, 2026 (target: 48h sla) october 20, 2026 18:00 utc october 20, 2026 18:30 utc 5829104 7920155 p1-security-incident gdpr-review internal-audit-2026 during an internal security and privacy assessment of the customer account platform, privacy assurance identified that the customer account data api endpoint /api/v2/clients/{client_id}/details returns unredacted personally identifiable information (pii) including full social security numbers (ssn), cleartext residential addresses, mobile numbers, and dates of birth without verifying field-level access permissions or applying data masking filters. /api/v2/clients/details //depot/services/customer_api/controller.py ssn (full 9-digit social security number in plaintext) residential_address (street address, city, postal code) phone_number (primary mobile phone) date_of_birth (client birthdate: yyyy-mm-dd) billing_email (personal contact email) curl -x get &quot;https://api.enterprise.internal/api/v2/clients/489201a/details&quot; \ -h &quot;accept: application/json&quot; { &quot;status&quot;: &quot;success&quot;, &quot;client_id&quot;: &quot;client_489201a&quot;, &quot;full_name&quot;: &quot;john doe&quot;, &quot;ssn&quot;: &quot;987-65-4321&quot;, &quot;date_of_birth&quot;: &quot;1985-04-12&quot;, &quot;phone_number&quot;: &quot;+1-555-019-2834&quot;, &quot;residential_address&quot;: &quot;742 evergreen terrace, springfield, or 97477&quot;, &quot;billing_email&quot;: &quot;johndoe@example.com&quot;, &quot;account_tier&quot;: &quot;enterprise_gold&quot; } mass exposure of sensitive customer pii without masking. direct violation of internal data protection policy, gdpr article 32, and ccpa, presenting high regulatory compliance and data breach risks. critical p1/s1 pii exposure: resolution required within 48 hours of initial triage (target due date: october 23, 2026 18:00 utc) in accordance with enterprise data protection policy. johndoe@company.com hi security triage, during our q3 internal privacy audit of user-facing microservices, we noticed a critical pii data leakage in the customer account api ( /api/v2/clients/details ). the endpoint returns raw database objects with unmasked ssns, residential addresses, and phone numbers. please see the report description above for reproduction curl and sample json payload. october 20, 2026 18:00 utc #1 security-triage@company.com acknowledging report and confirming p1/s1 classification. currently looking up the owning team in the service ownership directory to route to the customer account primary on-call. october 20, 2026 18:30 utc #2">
+            <td class="col-check"><input type="checkbox"></td>
+            <td>
+                <a href="../../../tracker/issues/618294710/" class="bug-link">
+                    <i class="material-icons">bug_report</i>
+                    <span>b/618294710</span>
+                </a>
+            </td>
+            <td><span class="level-badge priority-p1">P1</span></td>
+            <td><span class="level-badge severity-s1">S1</span></td>
+            <td><span class="status-chip status-triaged">Triaged</span></td>
+            <td>
+                <a href="../../../tracker/issues/618294710/" class="bug-row-title">[Internal Security Finding] Customer Account API (/api/v2/clients/details) leaking sensitive client PII (SSN, home address, phone) in unauthenticated responses</a>
+                <div class="bug-row-meta">
+                    <span class="component-chip-inline"><i class="material-icons">category</i> Security &gt; Privacy &amp; Data Protection &gt; Customer Data API</span>
+                    <code class="bug-row-endpoint">/api/v2/clients/details</code>
+                </div>
+            </td>
+            <td><span class='assignee-chip unassigned'>Unassigned</span></td>
+            <td class="col-date">October 20, 2026 18:30 UTC</td>
+        </tr>
+        
+
+        <tr id="noResultsRow" class="empty-state" style="display: none;">
+            <td colspan="8">
+                <i class="material-icons">search_off</i>
+                <strong>No bugs found matching your query criteria.</strong>
+                <span>Try refining your search terms or clearing the filter query.</span>
+            </td>
+        </tr>
+  
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const filterInput = document.getElementById('hotlistFilterInput');
+        const tableClearBtn = document.getElementById('tableClearBtn');
+        const resultsCounter = document.getElementById('tableResultsCounter');
+        const matchingCountBadge = document.getElementById('matchingCountBadge');
+
+        function matchRowAtomic(row, token) {
+            const status = (row.dataset.status || '').toLowerCase();
+            const assignee = (row.dataset.assignee || '').toLowerCase();
+            const priority = (row.dataset.priority || '').toUpperCase();
+            const severity = (row.dataset.severity || '').toUpperCase();
+            const component = (row.dataset.component || '').toLowerCase();
+            const type = (row.dataset.type || '').toLowerCase();
+            const hotlists = (row.dataset.hotlists || '').toLowerCase();
+            const rowId = (row.dataset.id || '').toLowerCase();
+            const searchBlob = (row.dataset.search || (row.textContent + ' ' + rowId)).toLowerCase();
+
+            if (token.includes(':')) {
+                const parts = token.split(':');
+                const k = parts[0].toLowerCase();
+                const rawV = parts.slice(1).join(':').trim();
+                const v = rawV.replace(/^"|"$/g, '').toLowerCase();
+
+                if (k === 'status' || k === 'state') {
+                    if (v === 'open') return !['fixed', 'verified', 'closed'].includes(status);
+                    if (['closed', 'done'].includes(v)) return ['fixed', 'verified', 'closed'].includes(status);
+                    return status.includes(v);
+                } else if (k === 'assignee' || k === 'owner' || k === 'user') {
+                    const targetAssignee = v.replace(/^@/, '');
+                    if (['none', 'unassigned', 'empty', 'null'].includes(targetAssignee)) {
+                        return assignee === 'unassigned' || assignee === '';
+                    }
+                    return assignee.includes(targetAssignee);
+                } else if (k === 'priority' || k === 'p') {
+                    let p = v.toUpperCase();
+                    if (!p.startsWith('P')) p = 'P' + p;
+                    return priority === p;
+                } else if (k === 'severity' || k === 's') {
+                    let s = v.toUpperCase();
+                    if (!s.startsWith('S')) s = 'S' + s;
+                    return severity === s;
+                } else if (k === 'component' || k === 'comp') {
+                    if (!(rawV.startsWith('"') && rawV.endsWith('"') && rawV.length > 2)) {
+                        return false;
+                    }
+                    if (v === 'iam') return component.includes('iam') || component.includes('identity') || component.includes('access management');
+                    if (v === 'infra') return component.includes('infra') || component.includes('infrastructure') || component.includes('docker') || component.includes('container');
+                    if (v === 'payments') return component.includes('payment') || component.includes('billing') || component.includes('financial');
+                    if (v === 'privacy') return component.includes('privacy') || component.includes('gdpr') || component.includes('compliance');
+                    if (v === 'gateway') return component.includes('gateway') || component.includes('edge') || component.includes('envoy') || component.includes('waf');
+                    return component.includes(v);
+                } else if (k === 'type' || k === 'kind') {
+                    return type.includes(v);
+                } else if (k === 'id' || k === 'bug') {
+                    const vClean = v.replace('b/', '');
+                    return rowId.includes(vClean) || searchBlob.includes(vClean);
+                } else if (k === 'hotlist' || k === 'hl') {
+                    return hotlists.includes(v);
+                }
+            }
+
+            return searchBlob.includes(token.toLowerCase());
+        }
+
+        function evaluateRowQuery(row, queryStr) {
+            if (!queryStr || !queryStr.trim()) return true;
+
+            const pattern = /(\(|\))|(\bAND\b|\bOR\b|\bNOT\b|&&|\|\||!|\|)|(\b[a-zA-Z_]+:(?:"[^"]*"|[^\s()]+))|("[^"]+")|([^\s()]+)/g;
+            const rawTokens = [];
+            let match;
+            while ((match = pattern.exec(queryStr)) !== null) {
+                const [full, paren, op, kv, phrase, word] = match;
+                if (paren) {
+                    rawTokens.push({ type: 'PAREN', val: paren });
+                } else if (op) {
+                    const opUpper = op.toUpperCase();
+                    if (['AND', '&&', '&'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'AND' });
+                    else if (['OR', '||', '|'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'OR' });
+                    else if (['NOT', '!'].includes(opUpper)) rawTokens.push({ type: 'OP', val: 'NOT' });
+                } else if (kv) {
+                    rawTokens.push({ type: 'KV', val: kv });
+                } else if (phrase) {
+                    rawTokens.push({ type: 'QUOTED_STRING', val: phrase.slice(1, -1) });
+                } else if (word) {
+                    const wUpper = word.toUpperCase();
+                    if (['AND', 'OR', 'NOT'].includes(wUpper)) {
+                        rawTokens.push({ type: 'OP', val: wUpper });
+                    } else {
+                        rawTokens.push({ type: 'UNQUOTED_WORD', val: word });
+                    }
+                }
+            }
+
+            if (rawTokens.length === 0) return true;
+
+            // Insert implicit AND between consecutive value tokens
+            const tokens = [];
+            for (let i = 0; i < rawTokens.length; i++) {
+                if (i > 0) {
+                    const prev = rawTokens[i - 1];
+                    const curr = rawTokens[i];
+                    const prevIsVal = (prev.type === 'KV' || prev.type === 'QUOTED_STRING' || prev.type === 'UNQUOTED_WORD' || (prev.type === 'PAREN' && prev.val === ')'));
+                    const currIsVal = (curr.type === 'KV' || curr.type === 'QUOTED_STRING' || curr.type === 'UNQUOTED_WORD' || (curr.type === 'PAREN' && curr.val === '(') || (curr.type === 'OP' && curr.val === 'NOT'));
+                    if (prevIsVal && currIsVal) {
+                        tokens.push({ type: 'OP', val: 'AND' });
+                    }
+                }
+                tokens.push(rawTokens[i]);
+            }
+
+            // Shunting-Yard to Postfix (RPN)
+            const precedence = { 'NOT': 3, 'AND': 2, 'OR': 1 };
+            const outputQueue = [];
+            const opStack = [];
+
+            for (const t of tokens) {
+                if (t.type === 'KV' || t.type === 'QUOTED_STRING' || t.type === 'UNQUOTED_WORD') {
+                    outputQueue.push(t);
+                } else if (t.type === 'OP') {
+                    while (opStack.length > 0 && opStack[opStack.length - 1].type === 'OP' &&
+                           (precedence[opStack[opStack.length - 1].val] || 0) >= (precedence[t.val] || 0)) {
+                        outputQueue.push(opStack.pop());
+                    }
+                    opStack.push(t);
+                } else if (t.type === 'PAREN') {
+                    if (t.val === '(') {
+                        opStack.push(t);
+                    } else if (t.val === ')') {
+                        while (opStack.length > 0 && !(opStack[opStack.length - 1].type === 'PAREN' && opStack[opStack.length - 1].val === '(')) {
+                            outputQueue.push(opStack.pop());
+                        }
+                        if (opStack.length > 0 && opStack[opStack.length - 1].val === '(') {
+                            opStack.pop();
+                        }
+                    }
+                }
+            }
+
+            while (opStack.length > 0) {
+                const op = opStack.pop();
+                if (op.type === 'OP') outputQueue.push(op);
+            }
+
+            // Evaluate RPN
+            const evalStack = [];
+            for (const item of outputQueue) {
+                if (item.type === 'KV') {
+                    evalStack.push(matchRowAtomic(row, item.val));
+                } else if (item.type === 'QUOTED_STRING') {
+                    const searchBlob = (row.dataset.search || (row.textContent + ' ' + (row.dataset.id || ''))).toLowerCase();
+                    evalStack.push(searchBlob.includes(item.val.toLowerCase()));
+                } else if (item.type === 'UNQUOTED_WORD') {
+                    evalStack.push(false);
+                } else if (item.type === 'OP') {
+                    if (item.val === 'NOT') {
+                        const v = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(!v);
+                    } else if (item.val === 'AND') {
+                        const b = evalStack.length > 0 ? evalStack.pop() : false;
+                        const a = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(a && b);
+                    } else if (item.val === 'OR') {
+                        const b = evalStack.length > 0 ? evalStack.pop() : false;
+                        const a = evalStack.length > 0 ? evalStack.pop() : false;
+                        evalStack.push(a || b);
+                    }
+                }
+            }
+
+            return evalStack.length > 0 ? evalStack[evalStack.length - 1] : true;
+        }
+
+        function filterTable(qStr) {
+            const rows = document.querySelectorAll('#hotlistTable tbody tr:not(#noResultsRow)');
+            const totalCount = rows.length;
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                if (evaluateRowQuery(row, qStr)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const noResultsRow = document.getElementById('noResultsRow');
+            if (noResultsRow) {
+                noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
+            }
+
+            if (resultsCounter) {
+                resultsCounter.innerHTML = `Showing <strong>${visibleCount}</strong> of ${totalCount} bugs`;
+            }
+            if (matchingCountBadge) {
+                matchingCountBadge.textContent = visibleCount;
+            }
+
+            if (tableClearBtn) {
+                tableClearBtn.style.display = qStr ? 'inline-flex' : 'none';
+            }
+        }
+
+        function clearAllFilters() {
+            if (filterInput) filterInput.value = '';
+            const url = new URL(window.location);
+            url.searchParams.delete('q');
+            window.history.pushState({}, '', url);
+            filterTable('');
+        }
+
+        if (filterInput) {
+            filterInput.addEventListener('input', function() {
+                filterTable(this.value);
+            });
+            filterInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const url = new URL(window.location);
+                    if (this.value) {
+                        url.searchParams.set('q', this.value);
+                    } else {
+                        url.searchParams.delete('q');
+                    }
+                    window.history.pushState({}, '', url);
+                    filterTable(this.value);
+                }
+            });
+        }
+
+        if (tableClearBtn) {
+            tableClearBtn.addEventListener('click', clearAllFilters);
+        }
+
+
+        const initialQuery = new URLSearchParams(window.location.search).get('q');
+        if (filterInput && initialQuery) {
+            filterInput.value = initialQuery;
+        }
+
+        // Initialize state on load
+        if (filterInput && filterInput.value) {
+            filterTable(filterInput.value);
+        }
+    </script>
+
+    <script>
+    // Static-site stand-in for the Issue Tracker server (see scripts/build_pages.py).
+    (function () {
+        const BUILD_TIME = 1792587548359;
+        const PAGE = {"kind": "hotlist", "id": "5829104"};
+        const KEY = 'pi2-static-tracker';
+        const DAY = 86400000;
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                        'August', 'September', 'October', 'November', 'December'];
+        const DATE_RE = new RegExp('\\b(' + MONTHS.join('|') + ') (\\d{2}), (\\d{4})\\b', 'g');
+        const dayShift = Math.floor(Date.now() / DAY) - Math.floor(BUILD_TIME / DAY);
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const fmtDate = (d) => `${MONTHS[d.getUTCMonth()]} ${pad(d.getUTCDate())}, ${d.getUTCFullYear()}`;
+        const nowStr = () => {
+            const d = new Date();
+            return `${fmtDate(d)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+        };
+        const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }[ch]));
+
+        function load() {
+            try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+        }
+        function save(state) {
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        }
+
+        // Keep build-time dates relative to today, as the live server does at startup.
+        function shiftDates() {
+            if (dayShift <= 0) return;
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+            nodes.forEach((n) => {
+                const shifted = n.nodeValue.replace(DATE_RE, (m, mon, day, year) =>
+                    fmtDate(new Date(Date.UTC(+year, MONTHS.indexOf(mon), +day + dayShift))));
+                if (shifted !== n.nodeValue) n.nodeValue = shifted;
+            });
+        }
+
+        // Mirrors render_comments_html() in apps/buganizer/controller.py.
+        function commentCard(c) {
+            const rawAuthor = c.author.split('@')[0].split('(')[0].trim();
+            let initials = rawAuthor.split(/\s+/).filter(Boolean).slice(0, 2)
+                .map((part) => part[0].toUpperCase()).join('');
+            if (!initials) initials = rawAuthor.slice(0, 2).toUpperCase();
+            let sum = 0;
+            for (const ch of rawAuthor) sum += ch.codePointAt(0);
+            const tone = sum % 6 + 1;
+            return `
+    <div class="card bug-card comment-card">
+        <div class="card-header">
+            <div class="reporter-info">
+                <div class="avatar tone-${tone}">${esc(initials)}</div>
+                <div class="reporter-details">
+                    <span class="reporter-name"><strong>${esc(c.author)}</strong></span>
+                    <span class="report-date"><span class="comment-number">${esc(c.number)}</span> &bull; commented on ${esc(c.date)}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <i class="material-icons">reply</i>
+                <i class="material-icons">more_vert</i>
+            </div>
+        </div>
+        <div class="card-body description-content">
+            ${esc(c.text).replace(/\n/g, '<br>')}
+        </div>
+    </div>`;
+        }
+
+        function applyToIssuePage(st) {
+            const comments = st.comments || [];
+            const container = document.getElementById('commentsContainer');
+            comments.forEach((c) => container.insertAdjacentHTML('beforeend', commentCard(c)));
+            const count = document.querySelector('.section-heading .count');
+            if (count) count.textContent = PAGE.baseComments + comments.length;
+            if (st.assignee !== undefined) {
+                document.getElementById('assigneeInput').value = st.assignee;
+                document.querySelectorAll('.status-chip').forEach((chip) => {
+                    chip.className = chip.className.replace(/status-\S+/, 'status-assigned');
+                });
+                document.getElementById('statusText').textContent = 'Assigned';
+                const headerChip = document.querySelector('.bug-id-row .status-chip');
+                if (headerChip) headerChip.textContent = 'Assigned';
+            }
+            if (st.modified) document.getElementById('lastModifiedDate').textContent = st.modified;
+        }
+
+        function applyToHotlistRow(row, st) {
+            const cells = row.children;
+            if (st.assignee !== undefined) {
+                row.dataset.assignee = (st.assignee || 'unassigned').toLowerCase();
+                row.dataset.status = 'assigned';
+                cells[4].innerHTML = '<span class="status-chip status-assigned">Assigned</span>';
+                cells[6].innerHTML = st.assignee
+                    ? `<span class='assignee-chip'><span class='mini-avatar'>${esc(st.assignee.slice(0, 2))}</span>@${esc(st.assignee)}</span>`
+                    : "<span class='assignee-chip unassigned'>Unassigned</span>";
+            }
+            const extra = (st.comments || []).map((c) => `${c.author} ${c.text} ${c.number}`).join(' ');
+            row.dataset.search = `${row.dataset.search} ${st.assignee || ''} ${extra}`.toLowerCase();
+            if (st.modified) cells[7].textContent = st.modified;
+        }
+
+        // Answer the issue page's POST calls from localStorage instead of the server.
+        const realFetch = window.fetch.bind(window);
+        window.fetch = function (url, opts) {
+            const m = String(url).match(/^\/api\/issues\/(\d+)\/(comments|assign)$/);
+            if (!m) return realFetch(url, opts);
+            const body = JSON.parse((opts && opts.body) || '{}');
+            const state = load();
+            const st = state[m[1]] = state[m[1]] || { comments: [] };
+            const now = nowStr();
+            let result;
+            if (m[2] === 'comments') {
+                const number = PAGE.baseComments + st.comments.length + 1;
+                const comment = {
+                    number: `#${number}`,
+                    author: body.author || 'security-triage@company.com',
+                    date: now,
+                    text: (body.text || '').trim(),
+                };
+                st.comments.push(comment);
+                result = { success: true, comment: comment, total_comments: number };
+            } else {
+                const assignee = (body.assignee_ldap || '').trim().replace(/^@+/, '');
+                st.assignee = assignee;
+                result = { success: true, bug_id: m[1], assignee_ldap: assignee, status: 'Assigned' };
+            }
+            st.modified = now;
+            save(state);
+            return Promise.resolve(new Response(JSON.stringify(result), {
+                status: 200, headers: { 'Content-Type': 'application/json' },
+            }));
+        };
+
+        shiftDates();
+        const state = load();
+        if (PAGE.kind === 'issue' && state[PAGE.id]) {
+            applyToIssuePage(state[PAGE.id]);
+        } else if (PAGE.kind === 'hotlist') {
+            document.querySelectorAll('#issuesTableBody tr[data-id]').forEach((row) => {
+                if (state[row.dataset.id]) applyToHotlistRow(row, state[row.dataset.id]);
+            });
+            // The page already filtered on load; redo it now that rows reflect local changes.
+            const input = document.getElementById('hotlistFilterInput');
+            if (input && input.value && typeof filterTable === 'function') filterTable(input.value);
+        }
+    })();
+    </script>
+
+    <div class="static-demo-badge" style="position:fixed;left:12px;bottom:12px;z-index:50;display:flex;gap:10px;align-items:center;padding:6px 12px;border-radius:999px;background:#202124;color:#fff;font:500 12px/1.4 Inter,system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+        <span>Static demo &middot; changes are saved in this browser only</span>
+        <a href="#" onclick="try{localStorage.removeItem('pi2-static-tracker')}catch(e){};location.reload();return false;" style="color:#8ab4f8;">Reset</a>
+        <a href="../../../" style="color:#8ab4f8;">Docs</a>
+    </div>
+</body>
+</html>
